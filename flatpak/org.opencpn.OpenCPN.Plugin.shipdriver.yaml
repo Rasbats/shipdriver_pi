@@ -1,0 +1,29 @@
+id: org.opencpn.OpenCPN.Plugin.shipdriver
+runtime: org.opencpn.OpenCPN
+runtime-version: stable
+sdk: org.freedesktop.Sdk//1.6
+build-extension: true
+separate-locales: false
+appstream-compose: false
+finish-args:
+    - --socket=x11
+    - --socket=pulseaudio
+    - --filesystem=home
+    - --device=all
+
+modules:
+    - name: shipdriver
+      no-autogen: true
+      cmake: true
+      config-opts:
+          - -DCMAKE_INSTALL_PREFIX=/app/extensions/shipdriver/
+          - -DPREFIX_PLUGINS=lib/opencpn
+      build-options:
+          cxxflags: -DFLATPAK
+          cflags: -DFLATPAK
+      sources:
+          - type: git
+            url: https://github.com/Rasbats/shipdriver_pi.git
+            tag: v0.5
+          - type: patch
+            path: 0001-flatpak-Update-API-lookup-data-dir-using-GetPluginDa.patch
