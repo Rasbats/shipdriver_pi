@@ -68,7 +68,10 @@ if(HAS_STD_CPP11_FLAG)
   add_compile_options(-std=c++11)
 endif()
 
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/api-16)
+
 SET(SRC_ShipDriver
+        api-16/ocpn_plugin.h
         src/ShipDriver_pi.h
         src/ShipDriver_pi.cpp
         src/icons.h
@@ -77,7 +80,6 @@ SET(SRC_ShipDriver
 	    src/ShipDrivergui.cpp
 	    src/ShipDrivergui_impl.cpp
 	    src/ShipDrivergui_impl.h
-		src/ocpn_plugin.h
 		src/folder.xpm
 		src/AisMaker.h
 		src/AisMaker.cpp
