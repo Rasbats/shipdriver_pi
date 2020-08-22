@@ -37,6 +37,9 @@ OPTION(MANAGED_PLUGIN "Use managed plugin" OFF)
 INCLUDE("cmake/PluginConfigure.cmake")
 INCLUDE("cmake/PluginJSON.cmake")
 
+# Prefer libGL.so to libOpenGL.so, see CMP0072
+set(OpenGL_GL_PREFERENCE "LEGACY")
+
 IF(SHIPDRIVER_USE_SVG)
   ADD_DEFINITIONS(-DSHIPDRIVER_USE_SVG)
 ENDIF(SHIPDRIVER_USE_SVG)
