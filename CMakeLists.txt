@@ -7,6 +7,10 @@
 # define minimum cmake version
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6.2)
 
+if (POLICY CMP0077)
+  cmake_policy(SET CMP0077 NEW)
+endif ()
+
 PROJECT(ShipDriver_pi)
 
 SET(PACKAGE_NAME ShipDriver_pi)
