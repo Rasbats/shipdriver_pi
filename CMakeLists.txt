@@ -13,6 +13,16 @@ endif ()
 
 PROJECT(ShipDriver_pi)
 
+# Locations where cmake looks for cmake modules.
+set(
+  CMAKE_MODULE_PATH
+  ${CMAKE_SOURCE_DIR}/build
+  ${CMAKE_SOURCE_DIR}/
+  ${CMAKE_SOURCE_DIR}/cmake
+)
+
+PROJECT(ShipDriver_pi)
+
 SET(PACKAGE_NAME ShipDriver_pi)
 SET(VERBOSE_NAME ShipDriver)
 SET(TITLE_NAME ShipDriver)
