@@ -71,7 +71,7 @@ SET(OCPN_STABLE_REPO "mike-rossiter/shipdriver-prod"
     CACHE STRING "Default repository for tagged builds")
 OPTION(SHIPDRIVER_USE_SVG "Use SVG graphics" ON)
 # For OpenCPN version 5.x, NOT 5.0 ON. For version 5.0 OFF
-OPTION(MANAGED_PLUGIN "Use managed plugin" OFF)
+OPTION(MANAGED_PLUGIN "Use managed plugin" ON)
 OPTION(OCPN_FLATPAK "Build flatpak plugin" OFF)
 
 
@@ -97,8 +97,6 @@ endfunction (configure_metadata)
 IF(SHIPDRIVER_USE_SVG)
   ADD_DEFINITIONS(-DSHIPDRIVER_USE_SVG)
 ENDIF(SHIPDRIVER_USE_SVG)
-
-ADD_DEFINITIONS(-DMANAGED_PLUGIN:ON)
 
 IF(MANAGED_PLUGIN)
 ADD_DEFINITIONS(-DMANAGED_PLUGIN)
