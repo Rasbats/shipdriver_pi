@@ -42,7 +42,7 @@ When the build is run, the git-push part will
   - Commit and push the change to the auto branch in your repo.
 
 By default the changes are pushed to the 'auto' branch. The branch name can be
-tweaked using the GIT_BRANCH environment variable in the builder.
+tweaked using the GIT\_BRANCH environment variable in the builder.
 
 ### Making a Pull Request
 
