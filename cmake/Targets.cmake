@@ -59,11 +59,7 @@ set(_cs_script "
 file(WRITE "${CMAKE_BINARY_DIR}/checksum.cmake" ${_cs_script})
 
 # Command to build legacy package
-if (APPLE)
-    set(_build_pkg_cmd ${_build_target_cmd} create-pkg)
-else ()
-    set(_build_pkg_cmd ${_build_target_cmd} package)
-endif ()
+set(_build_pkg_cmd ${_build_target_cmd} package)
 
 
 function (tarball_target)
