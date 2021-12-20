@@ -1,6 +1,8 @@
 # This is an example configuration file. The items GIT_KEY_PASSWORD and
 # CLOUDSMITH_API_KEY are secrets and hence obfuscated here. Other values
-# are as used by me.
+# are as used by me.  
+# REMOVE THIS FILE FROM THE SCRIPTS FOLDER AFTER ADDING PRIVATE KEYS.
+#
 #
 # Modify as required and install in:
 #
@@ -8,14 +10,19 @@
 #    Windows (cmd):  %APPDATA%\local-build.rc
 #    Windows (bash): $APPDATA/local-build.rc
 #
+# THEN REMOVE THIS FILE FROM THE SCRIPTS FOLDER
 # The variables here are the same as used when setting up a builder like
 # circleci or Appveyor. See:
-# https://opencpn-manuals.github.io/main/AlternativeWorkflow/CircleCI.html#_set_the_environment_variables_for_appveyor
+# https://opencpn-manuals.github.io/main/AlternativeWorkflow/InstallConfigure/Builders/IntroBuilders.html
+# https://opencpn-manuals.github.io/main/AlternativeWorkflow/InstallConfigure/BuilderEnv.html
 #
+export CLOUDSMITH_API_KEY=
+export GIT_KEY_PASSWORD=
+export GIT_REPO=git@github.com:<username>/plugins.git
 
-export CLOUDSMITH_API_KEY=39afdeadbeefxxerrnotevenhexdigitsher
-export GIT_KEY_PASSWORD=MySecretPassword
-export GIT_REPO=git@github.com:leamas/plugins.git
+# DO NOT LEAVE THIS FILE IN YOUR SCRIPTS FOLDER, IF YOU ENTER YOUR PRIVATE PASSWORD AND KEY
+# FIRST COPY THE FILE TO THE LOCATION SPECIFIED ABOVE, AND MODIFY IT THERE.
+# REMOVE THIS FILE BEFORE PUSHING TO THE CLOUD, IF YOU ENTER YOUR PRIVATE PASSWORD AND KEY
 
 # These variables are only required when using upload directories others
 # than those defined in Plugin.cmake. To be effective they must be available
@@ -24,3 +31,9 @@ export GIT_REPO=git@github.com:leamas/plugins.git
 export CLOUDSMITH_STABLE_REPO=alec-leamas/opencpn-plugins-stable
 export CLOUDSMITH_UNSTABLE_REPO=alec-leamas/opencpn-plugins-unstable
 export CLOUDSMITH_BETA_REPO=alec-leamas/opencpn-plugins-stable
+
+# OR something like
+
+# export CLOUDSMITH_STABLE_REPO=opencpn/<plugin>-prod
+# export CLOUDSMITH_UNSTABLE_REPO=opencpn/<plugin>-alpha
+# export CLOUDSMITH_BETA_REPO=opencpn/<plugin>-beta
