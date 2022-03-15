@@ -146,6 +146,7 @@ if [ -f Plugin.cmake ]; then CMakeLists=CMakeLists.txt; fi
 echo "Templates: Updating other files"
 for f in \
     appveyor.yml \
+    Changelog.md \
     .circleci \
     .clang-format \
     .cmake-format.yaml \
