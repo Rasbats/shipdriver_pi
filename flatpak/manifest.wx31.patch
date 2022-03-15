@@ -1,0 +1,15 @@
+--- a/org.opencpn.OpenCPN.Plugin.shipdriver.yaml	2022-01-08 14:30:21.577754282 +0100
++++ b/org.opencpn.OpenCPN.Plugin.shipdriver.yaml	2022-03-15 14:02:55.253242838 +0100
+@@ -7,5 +7,5 @@
+ id: org.opencpn.OpenCPN.Plugin.shipdriver
+ runtime: org.opencpn.OpenCPN
+-runtime-version: stable
++runtime-version: beta
+ #runtime-version: devel   # for nightly builds
+ sdk: org.freedesktop.Sdk//20.08
+@@ -28,4 +28,5 @@
+           - -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
+           - -DBUILD_TYPE:STRING=tarball
++          - -DOCPN_WX_ABI=wx315
+           - -Uplugin_target
+       build-options:
