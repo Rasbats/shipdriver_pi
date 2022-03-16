@@ -227,9 +227,8 @@ git commit -m "cmake: Update TemplateVersion to $commit"
 cat << EOF
 
 
-Shipdriver templates has been updated. To review changes made:
+Shipdriver templates has been updated. Please review Changelog.md for info
+about changes in last release.
 
-    $ git log --oneline -12
-
-See UPDATE_TEMPLATES.md for more.
+See UPDATE_TEMPLATES.md for more info.
 EOF
