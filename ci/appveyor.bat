@@ -14,10 +14,16 @@ call %SCRIPTDIR%..\cache\wx-config.bat
 echo USING wxWidgets_LIB_DIR: !wxWidgets_LIB_DIR!
 echo USING wxWidgets_ROOT_DIR: !wxWidgets_ROOT_DIR!
 
-where dumpbin.exe  >nul 2>&1
+where dumpbin.exe >nul 2>&1
 if errorlevel 1 (
   set "VS_HOME=C:\Program Files\Microsoft Visual Studio\2022"
   call "%VS_HOME%\Community\VC\Auxiliary\Build\vcvars32.bat"
+)
+
+where cmake.exe >nul 2>&1
+if errorlevel 1 (
+  set "CMAKE_HOME=C:\Program Files\CMake"
+  set "PATH=%PATH%;%CMAKE_HOME%\bin" 
 )
 
 if exist build (rmdir /s /q build)

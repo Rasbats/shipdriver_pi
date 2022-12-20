@@ -24,6 +24,15 @@ flatpak-steps: &flatpak-steps
     - run: ci/git-push.sh /build-flatpak
 
 jobs:
+  build-windows:
+    machine:
+      image: windows-server-2022-gui:edge
+      resource_class: windows.medium
+      shell: cmd
+    steps:
+      - checkout
+      - run: git submodule update --init opencpn-libs
+      - run: cd ci && circleci.bat && cd ..
   build-buster:
     docker:
       - image: circleci/buildpack-deps:bullseye-scm
@@ -252,7 +261,7 @@ workflows:
   version: 2
   build_all:
     jobs:
-
+      - build-windows
       - build-flatpak-arm64:
           <<: *std-filters
 
