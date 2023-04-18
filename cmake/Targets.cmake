@@ -35,7 +35,8 @@ endif ()
 
 # Set up _build_cmd
 set(_build_cmd
-  cmake --build ${CMAKE_BINARY_DIR} --parallel ${OCPN_NPROC} --config $<CONFIG>
+  #cmake --build ${CMAKE_BINARY_DIR} --parallel ${OCPN_NPROC} --config $<CONFIG>
+  cmake --build ${CMAKE_BINARY_DIR} --parallel 1 --config $<CONFIG>
 )
 
 # Set up _build_target_cmd and _install_cmd
@@ -144,6 +145,7 @@ function (tarball_target)
       -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/app/files
       -DBUILD_TYPE:STRING=tarball
       $ENV{CMAKE_BUILD_OPTS}
+      --trace-source=CMakeLists.txt --trace-expand
       ${CMAKE_BINARY_DIR}
   )
 
@@ -178,6 +180,7 @@ function (flatpak_target manifest)
       -DBUILD_TYPE:STRING=flatpak
       -Uplugin_target
       $ENV{CMAKE_BUILD_OPTS}
+      --trace-source=CMakeLists.txt --trace-expand
       ${CMAKE_BINARY_DIR}
   )
 
