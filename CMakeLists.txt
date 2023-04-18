@@ -89,7 +89,7 @@ if (NOT ${BUILD_TYPE} STREQUAL "flatpak")
 
   include_directories(BEFORE ${CMAKE_BINARY_DIR}/include)
  
-  if (COMMAND add_plugin_libraries)
+  if (COMMAND add_plugin_libraries AND NOT DEFER_PLUGIN_LIBS)
     message(STATUS "Adding plugin libs")
     add_plugin_libraries()
   endif ()

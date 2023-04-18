@@ -41,6 +41,7 @@ modules:
           - -DCMAKE_BUILD_TYPE:STRING=Release
           - -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
           - -DBUILD_TYPE:STRING=tarball
+          - -DDEFER_PLUGIN_LIBS:BOOL=ON
           - -Uplugin_target
       build-options:
           cxxflags: -DFLATPAK -O3
