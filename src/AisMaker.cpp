@@ -247,7 +247,7 @@ string AisMaker::NMEAencapsulate(string BigString, int numsixes)
     free(intChars);
     return capsule;
 }
-/*
+
 wxString AisMaker::makeCheckSum(wxString mySentence)
 {
     size_t i;
@@ -263,30 +263,6 @@ wxString AisMaker::makeCheckSum(wxString mySentence)
     tmpss << hex << (int)XOR << endl;
     wxString mystr = tmpss.str();
     return mystr;
-}
-*/
-//Generates the checksum from given string.
-std::string AisMaker::makeCheckSum(std::string s) {
-    int sum = 0;
-
-    //XOR the string.
-    for (int i = 1; i <= s.length() - 2; i++) {
-        sum = sum ^ s[i];
-    }
-
-    //Convert to hex.
-    std::stringstream sstream;
-    sstream << std::hex << sum;
-    std::string result = sstream.str();
-
-    //Letters to caps.
-    transform(result.begin(), result.end(), result.begin(), ::toupper);
-
-    //Adds 0 before a single digit.
-    if (result.length() <= 1) {
-        result = "0" + result;
-    }
-    return result;
 }
 
 wxString AisMaker::nmeaEncode(wxString type, int iMMSI, wxString status,
