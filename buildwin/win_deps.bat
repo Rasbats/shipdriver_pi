@@ -67,14 +67,14 @@ pathman add "%POEDIT_HOME%\bin" > nul
 
 :: Update required python stuff
 ::
-python3 --version > nul 2>&1 && python3 -m ensurepip > nul 2>&1
+python --version > nul 2>&1 && python -m ensurepip > nul 2>&1
 if errorlevel 1 choco install -y python
-python3 --version
-python3 -m ensurepip
-python3 -m pip install --upgrade pip
-python3 -m pip install -q setuptools wheel
-python3 -m pip install -q cloudsmith-cli
-python3 -m pip install -q cryptography
+python --version
+python -m ensurepip
+python -m pip install --upgrade pip
+python -m pip install -q setuptools wheel
+python -m pip install -q cloudsmith-cli
+python -m pip install -q cryptography
 
 :: Install pre-compiled wxWidgets and other DLL; add required paths.
 ::
