@@ -67,24 +67,24 @@ pathman add "%POEDIT_HOME%\bin" > nul
 
 :: Update required python stuff
 ::
-python --version > nul 2>&1 && python -m ensurepip > nul 2>&1
+python3 --version > nul 2>&1 && python3 -m ensurepip > nul 2>&1
 if errorlevel 1 choco install -y python
-python --version
-python -m ensurepip
-python -m pip install --upgrade pip
-python -m pip install -q setuptools wheel
-python -m pip install -q cloudsmith-cli
-python -m pip install -q cryptography
+python3 --version
+python3 -m ensurepip
+python3 -m pip install --upgrade pip
+python3 -m pip install -q setuptools wheel
+python3 -m pip install -q cloudsmith-cli
+python3 -m pip install -q cryptography
 
 :: Install pre-compiled wxWidgets and other DLL; add required paths.
 ::
 set SCRIPTDIR=%~dp0
 if "%~1"=="wx32" (
-  set "WXWIN=%SCRIPTDIR%..\cache\wxWidgets-3.2.1"
+  set "WXWIN=%SCRIPTDIR%..\cache\wxWidgets-3.2.2.1"
   set "wxWidgets_ROOT_DIR=!WXWIN!"
   set "wxWidgets_LIB_DIR=!WXWIN!\lib\vc14x_dll"
 ) else (
-  set "WXWIN=%SCRIPTDIR%..\cache\wxWidgets-3.1.2"
+  set "WXWIN=%SCRIPTDIR%..\cache\wxWidgets-3.2.2.1"
   set "wxWidgets_ROOT_DIR=!WXWIN!"
   set "wxWidgets_LIB_DIR=!WXWIN!\lib\vc_dll"
 )
@@ -97,21 +97,21 @@ echo set "wxWidgets_LIB_DIR=%wxWidgets_LIB_DIR%" >> %CONFIG_FILE%
 if not exist "%WXWIN%" (
   wget --version > nul 2>&1 || choco install -y wget
   if  "%~1"=="wx32" (
-      echo Downloading 3.2.1
-      if not exist  %SCRIPTDIR%..\cache\wxWidgets-3.2.1 (
-          mkdir %SCRIPTDIR%..\cache\wxWidgets-3.2.1
+      echo Downloading 3.2.2.1
+      if not exist  %SCRIPTDIR%..\cache\wxWidgets-3.2.2.1 (
+          mkdir %SCRIPTDIR%..\cache\wxWidgets-3.2.2.1
       )
       set "GITHUB_DL=https://github.com/wxWidgets/wxWidgets/releases/download"
-      wget -nv !GITHUB_DL!/v3.2.1/wxMSW-3.2.1_vc14x_Dev.7z
-      7z x -o%SCRIPTDIR%..\cache\wxWidgets-3.2.1 wxMSW-3.2.1_vc14x_Dev.7z
-      wget -nv !GITHUB_DL!/v3.2.1/wxWidgets-3.2.1-headers.7z
-      7z x -o%SCRIPTDIR%..\cache\wxWidgets-3.2.1 wxWidgets-3.2.1-headers.7z
+      wget -nv !GITHUB_DL!/v3.2.2.1/wxMSW-3.2.2_vc14x_Dev.7z
+      7z x -o%SCRIPTDIR%..\cache\wxWidgets-3.2.2.1 wxMSW-3.2.2_vc14x_Dev.7z
+      wget -nv !GITHUB_DL!/v3.2.2.1/wxWidgets-3.2.2.1-headers.7z
+      7z x -o%SCRIPTDIR%..\cache\wxWidgets-3.2.2.1 wxWidgets-3.2.2.1-headers.7z
   ) else (
-      echo Downloading 3.1.2
-      wget -O wxWidgets-3.1.2.7z -nv ^
+      echo Downloading 3.2.2.1
+      wget -O wxWidgets-3.2.2.1.7z -nv ^
         https://download.opencpn.org/s/E2p4nLDzeqx4SdX/download
       7z i > nul 2>&1 || choco install -y 7zip
-      7z x wxWidgets-3.1.2.7z -o%WXWIN%
+      7z x wxWidgets-3.2.2.1.7z -o%WXWIN%
   )
 )
 
