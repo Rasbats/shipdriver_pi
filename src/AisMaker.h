@@ -24,7 +24,7 @@ public:
     string Str2Six(string str, int length);
     int BString2Int(char* bitlist);
     string NMEAencapsulate(string BigString, int numsixes);
-    std::string makeCheckSum(std::string s);
+    wxString makeCheckSum(wxString mySentence);
     wxString nmeaEncode(wxString type, int MMSI, wxString status, double spd,
         double ilat, double ilon, double crse, double hdg, wxString channel,
         wxString timestamp);
