@@ -91,7 +91,7 @@ wxPoint g_mouse_pos_screen;
 void Dlg::OnMouseEvent( wxMouseEvent& event )
 {
     g_mouse_pos_screen = ClientToScreen( event.GetPosition() );
-    
+
     if(event.Dragging()){
         int x = wxMax(0, g_startPos.x + (g_mouse_pos_screen.x - g_startMouse.x));
         int y = wxMax(0, g_startPos.y + (g_mouse_pos_screen.y - g_startMouse.y));
@@ -99,7 +99,7 @@ void Dlg::OnMouseEvent( wxMouseEvent& event )
         x = wxMin(x, xmax);
         int ymax = ::wxGetDisplaySize().y - (GetSize().y * 2);          // Some fluff at the bottom
         y = wxMin(y, ymax);
-        
+
         g_Window->Move(x, y);
     }
 }
@@ -420,21 +420,21 @@ void Dlg::Notify()
         MWVT = createMWVTSentence(initSpd, myDir, wdir, wspd);
         MWD = createMWDSentence(wdir, wspd);
 
-        PushNMEABuffer(MWVA + _T("\n"));
-        PushNMEABuffer(MWVT + _T("\n"));
-        PushNMEABuffer(MWD + _T("\n"));
+        PushNMEABuffer(MWVA + _T("\r"));
+        PushNMEABuffer(MWVT + _T("\r"));
+        PushNMEABuffer(MWD + _T("\r"));
     }
 
     GLL = createGLLSentence(mdt, initLat, initLon, initSpd, myDir);
     VTG = createVTGSentence(initSpd, myDir);
     VHW = createVHWSentence(initSpd, myDir);
 
-    PushNMEABuffer(GLL + _T("\n"));
-    PushNMEABuffer(VTG + _T("\n"));
-    PushNMEABuffer(VHW + _T("\n"));
+    PushNMEABuffer(GLL + _T("\r"));
+    PushNMEABuffer(VTG + _T("\r"));
+    PushNMEABuffer(VHW + _T("\r"));
 
     if (m_bUseAis)
-        PushNMEABuffer(myNMEAais + _T("\n"));
+        PushNMEABuffer(myNMEAais + _T("\r"));
 
     initLat = stepLat;
     initLon = stepLon;
@@ -522,7 +522,7 @@ wxString Dlg::createVHWSentence(double stw, double hdg)
     1   2   3   4   5   6   7   8 9
     |   |   |   |   |   |   |   | |
     $--VHW, x.x, T, x.x, M, x.x, N, x.x, K*hh
-    1) Degress	True
+    1) Degress  True
     2) T = True
     3) Degrees Magnetic
     4) M = Magnetic
@@ -1304,7 +1304,7 @@ double Dlg::ReadPolars(wxString filename, double windangle, double windspeed)
                         = wxString::Format(_T("%5.2f"), myWindAngle);
                     if (angleOut
                         == theWindAngle) { // we have found the correct section
-                                           // of the polars file	for the
+                                           // of the polars file    for the
                                            // relative wind
                         for (TiXmlElement* g = e->FirstChildElement(); g;
                              g = g->NextSiblingElement()) {
