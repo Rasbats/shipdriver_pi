@@ -420,21 +420,21 @@ void Dlg::Notify()
         MWVT = createMWVTSentence(initSpd, myDir, wdir, wspd);
         MWD = createMWDSentence(wdir, wspd);
 
-        PushNMEABuffer(MWVA + _T("\r"));
-        PushNMEABuffer(MWVT + _T("\r"));
-        PushNMEABuffer(MWD + _T("\r"));
+        PushNMEABuffer(MWVA + _T("\r\n"));
+        PushNMEABuffer(MWVT + _T("\r\n"));
+        PushNMEABuffer(MWD + _T("\r\n"));
     }
 
     GLL = createGLLSentence(mdt, initLat, initLon, initSpd, myDir);
     VTG = createVTGSentence(initSpd, myDir);
     VHW = createVHWSentence(initSpd, myDir);
 
-    PushNMEABuffer(GLL + _T("\r"));
-    PushNMEABuffer(VTG + _T("\r"));
-    PushNMEABuffer(VHW + _T("\r"));
+    PushNMEABuffer(GLL + _T("\r\n"));
+    PushNMEABuffer(VTG + _T("\r\n"));
+    PushNMEABuffer(VHW + _T("\r\n"));
 
     if (m_bUseAis)
-        PushNMEABuffer(myNMEAais + _T("\r"));
+        PushNMEABuffer(myNMEAais + _T("\r\n"));
 
     initLat = stepLat;
     initLon = stepLon;

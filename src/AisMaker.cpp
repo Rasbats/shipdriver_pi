@@ -260,7 +260,7 @@ wxString AisMaker::makeCheckSum(wxString mySentence)
     for (XOR = 0, i = 0; i < iLen; i++)
         XOR ^= (unsigned char)Buff[i];
     stringstream tmpss;
-    tmpss << hex << (int)XOR << endl;
+    tmpss << hex << (int)XOR;
     wxString mystr = tmpss.str();
     return mystr;
 }
