@@ -407,8 +407,10 @@ wxString AisMaker::nmeaEncode1_2_3(
     int bsz = BigString.size();
     int numSixes = (bsz / 6);
 
+    string channel1 = (const char*)channel.mb_str();
+
     string capsule = NMEAencapsulate(BigString, numSixes);
-    string aisnmea = "AIVDM,1,1,," + channel + "," + capsule + ",O";
+    string aisnmea = "AIVDM,1,1,," + channel1 + "," + capsule + ",O";
     wxString myNMEA_SART = aisnmea;
     wxString myCheck = makeCheckSum(myNMEA_SART);
 
