@@ -66,6 +66,8 @@ Dlg::Dlg(wxWindow* parent, wxWindowID id, const wxString& title,
     m_bInvalidGribFile = false;
     m_bShipDriverHasStarted = false;
 
+    m_bSART = false;
+
 #ifdef __ANDROID__
     g_Window = this;
     GetHandle()->setStyleSheet( qtStyleSheet);
@@ -79,7 +81,7 @@ Dlg::Dlg(wxWindow* parent, wxWindowID id, const wxString& title,
 
         pConf->Read(_T("shipdriverUseAis"), &m_bUseAis, 0);
         pConf->Read(_T("shipdriverUseFile"), &m_bUseFile, 0);
-        pConf->Read(_T("shipdriverMMSI"), &m_tMMSI, "12345");
+        pConf->Read(_T("shipdriverMMSI"), &m_tMMSI, "123456");
     }
 }
 
@@ -176,13 +178,18 @@ void Dlg::StartDriving()
         return;
     }
 
-    m_bShipDriverHasStarted = true;
-    m_bUsingWind = false;
-
     if (!m_tMMSI.ToLong(&m_iMMSI)) {
         wxMessageBox(_("MMSI must be a number, please change in Preferences"));
         return;
     }
+
+    if (m_tMMSI.Len() != 9) {
+        wxMessageBox(_("MMSI must be nine digits, please change in Preferences"));
+        return;
+    }
+
+    m_bShipDriverHasStarted = true;
+    m_bUsingWind = false;
 
     if (m_bUseFile) {
 
@@ -330,6 +337,26 @@ void Dlg::GoToStandby()
     Refresh();
 }
 
+// Now for the distress alarms
+
+void Dlg::OnSART(wxCommandEvent& event)
+{
+    if (m_Timer->IsRunning()) {
+
+
+        bool active = m_buttonSART->GetValue();
+        if (active) {
+            m_bSART = true;
+            m_buttonSART->SetBackgroundColour(wxColour(255, 0, 0));
+        } else { 
+            m_bSART = false;
+            m_buttonSART->SetBackgroundColour(wxColour(0, 255, 0));
+        }
+        Refresh();
+    }
+}
+
+
 void Dlg::OnClose(wxCloseEvent& event)
 {
     if (m_Timer->IsRunning())
@@ -402,6 +429,21 @@ void Dlg::Notify()
     wxString myNMEAais = myAIS->nmeaEncode(_T("18"), m_iMMSI, _T("5"), initSpd,
         initLat, initLon, myDir, myDir, _T("B"), timeStamp);
 
+    bool SART_active = m_buttonSART->GetValue();
+    wxString myNMEA_SART;
+
+    if (m_bSART) {
+        wxString notMID = m_tMMSI.Mid(3);
+        wxString SARTid = "970" + notMID;
+
+        int SARTint = wxAtoi(SARTid);
+        myNMEA_SART = myAIS->nmeaEncode1_2_3(
+            1, SARTint, initSpd, initLat, initLon, myDir, myDir, _T("A"));
+
+        m_textCtrlSART->SetValue(myNMEA_SART);
+        PushNMEABuffer(myNMEA_SART + _T("\r\n"));
+    }
+
     if (m_bUseFile)
         nmeafile->AddLine(myNMEAais);
 
@@ -433,9 +475,9 @@ void Dlg::Notify()
     PushNMEABuffer(VTG + _T("\r\n"));
     PushNMEABuffer(VHW + _T("\r\n"));
 
-    if (m_bUseAis)
-        PushNMEABuffer(myNMEAais + _T("\r\n"));
-
+    if (m_bUseAis) {
+        PushNMEABuffer(myNMEAais + _T("\r\n"));        
+    }
     initLat = stepLat;
     initLon = stepLon;
 

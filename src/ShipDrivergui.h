@@ -24,6 +24,7 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/stattext.h>
+#include <wx/tglbtn.h>
 #include <wx/statbox.h>
 #include <wx/timer.h>
 #include <wx/dialog.h>
@@ -58,7 +59,7 @@ class ShipDriverBase : public wxDialog
 		wxButton* m_buttonMinus10;
 		wxButton* m_buttonPlus10;
 		wxButton* m_buttonPlus1;
-		wxButton* m_buttonSart;
+		wxToggleButton* m_buttonSART;
 		wxButton* m_buttonMOB;
 		wxButton* m_buttonEPIRB;
 		wxButton* m_buttonDSCAlert;
@@ -76,6 +77,7 @@ class ShipDriverBase : public wxDialog
 		virtual void OnMinus10( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlus10( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlus1( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSART( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTimer( wxTimerEvent& event ) { event.Skip(); }
 
 
@@ -86,6 +88,7 @@ class ShipDriverBase : public wxDialog
 		wxStaticText* m_stHeading;
 		wxStaticText* m_stSpeed;
 		wxSlider* m_SliderSpeed;
+		wxTextCtrl* m_textCtrlSART;
 		wxTimer m_timer1;
 
 		ShipDriverBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );

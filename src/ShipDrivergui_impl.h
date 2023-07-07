@@ -152,6 +152,11 @@ public:
     wxString m_tMMSI;
 
     bool m_bAuto;
+
+    // Distress alarms
+    bool m_bSART;
+
+
     wxDateTime m_GribTimelineTime;
 
     double myDir;
@@ -215,6 +220,9 @@ private:
     void GoToStandby();
 
     void OnAuto(wxCommandEvent& event);
+
+    // Distress alarms
+    void OnSART(wxCommandEvent& event);
 
     long m_iMMSI;
 
