@@ -429,7 +429,7 @@ void Dlg::Notify()
     wxString myNMEAais = myAIS->nmeaEncode(_T("18"), m_iMMSI, _T("5"), initSpd,
         initLat, initLon, myDir, myDir, _T("B"), timeStamp);
 
-    bool SART_active = m_buttonSART->GetValue();
+    SART_active = m_buttonSART->GetValue();
     wxString myNMEA_SART;
 
     if (m_bSART) {

@@ -191,6 +191,8 @@ private:
     bool m_bUseStop;
     bool m_bUsePause;
 
+    bool SART_active;
+
     wxString ParseNMEAIdentifier(wxString sentence);
     wxString ParseNMEASentence(wxString sentence, wxString id);
 
