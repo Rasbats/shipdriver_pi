@@ -67,6 +67,7 @@ Dlg::Dlg(wxWindow* parent, wxWindowID id, const wxString& title,
     m_bShipDriverHasStarted = false;
 
     m_bSART = false;
+    SART_stop_count = 999;
 
 #ifdef __ANDROID__
     g_Window = this;
