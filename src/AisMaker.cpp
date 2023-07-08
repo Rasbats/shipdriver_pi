@@ -337,9 +337,10 @@ wxString AisMaker::nmeaEncode(wxString type, int iMMSI, wxString status,
     return myNMEA;
 }
 
-wxString AisMaker::nmeaEncode1_2_3(   
+wxString AisMaker::nmeaEncode1_2_3(
     int message_id, 
     int iMMSI,
+    int nav_status,
     float sog, // Knots.
     double ilat, double ilon,    
     double cog, // Degrees.
@@ -356,7 +357,7 @@ wxString AisMaker::nmeaEncode1_2_3(
     string sMMSI = (const char*)MMSI.mb_str();    
     string oMMSI = Int2BString(Str2Int(sMMSI, ""), 30);
     
-    string nav_status = Int2BString(14, 4); //AIS-SART (active), MOB-AIS, EPIRB-AIS
+    string nav_status1 = Int2BString(nav_status, 4); //AIS-SART (active), MOB-AIS, EPIRB-AIS
     string rot_raw = Int2BString(0, 8);
 
     wxString SPEED = wxString::Format(_T("%f"), sog * 10);
@@ -401,7 +402,7 @@ wxString AisMaker::nmeaEncode1_2_3(
 
     string BigString = MessageID;
     BigString = BigString + RepeatIndicator;
-    BigString = BigString + oMMSI + nav_status + rot_raw + sog2 + position_accuracy + Longitude
+    BigString = BigString + oMMSI + nav_status1 + rot_raw + sog2 + position_accuracy + Longitude
             + Latitude + COG + Heading + TimeStamp + special_manoeuvre + spare + raim + sync_state + slot_timeout + slot_offset;
 
     int bsz = BigString.size();

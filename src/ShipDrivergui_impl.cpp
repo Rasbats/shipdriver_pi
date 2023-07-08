@@ -343,16 +343,15 @@ void Dlg::OnSART(wxCommandEvent& event)
 {
     if (m_Timer->IsRunning()) {
 
-
         bool active = m_buttonSART->GetValue();
         if (active) {
             m_bSART = true;
             m_buttonSART->SetBackgroundColour(wxColour(255, 0, 0));
         } else { 
+            SART_stop_count = 0;
             m_bSART = false;
-            m_buttonSART->SetBackgroundColour(wxColour(0, 255, 0));
+            m_buttonSART->SetBackgroundColour(wxColour(0, 255, 0));           
         }
-        Refresh();
     }
 }
 
@@ -430,7 +429,7 @@ void Dlg::Notify()
         initLat, initLon, myDir, myDir, _T("B"), timeStamp);
 
     SART_active = m_buttonSART->GetValue();
-    wxString myNMEA_SART;
+    
 
     if (m_bSART) {
         wxString notMID = m_tMMSI.Mid(3);
@@ -438,7 +437,18 @@ void Dlg::Notify()
 
         int SARTint = wxAtoi(SARTid);
         myNMEA_SART = myAIS->nmeaEncode1_2_3(
-            1, SARTint, initSpd, initLat, initLon, myDir, myDir, _T("A"));
+            1, SARTint, 14, initSpd, initLat, initLon, myDir, myDir, _T("B"));
+
+        m_textCtrlSART->SetValue(myNMEA_SART);
+        PushNMEABuffer(myNMEA_SART + _T("\r\n"));
+    } else if (SART_stop_count < 5){
+        SART_stop_count++;
+        wxString notMID = m_tMMSI.Mid(3);
+        wxString SARTid = "970" + notMID;
+        
+        int SARTint = wxAtoi(SARTid);
+        myNMEA_SART = myAIS->nmeaEncode1_2_3(
+            1, SARTint, 15, initSpd, initLat, initLon, myDir, myDir, _T("B"));
 
         m_textCtrlSART->SetValue(myNMEA_SART);
         PushNMEABuffer(myNMEA_SART + _T("\r\n"));

@@ -224,6 +224,8 @@ private:
     void OnAuto(wxCommandEvent& event);
 
     // Distress alarms
+    wxString myNMEA_SART;
+    int SART_stop_count;
     void OnSART(wxCommandEvent& event);
 
     long m_iMMSI;
