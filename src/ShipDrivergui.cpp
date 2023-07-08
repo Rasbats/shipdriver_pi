@@ -271,11 +271,10 @@ ShipDriverBase::ShipDriverBase( wxWindow* parent, wxWindowID id, const wxString&
 
 	fgSizer3->Add( m_buttonSART, 0, wxALL|wxEXPAND, 5 );
 
-	m_buttonMOB = new wxButton( sbSizer3->GetStaticBox(), wxID_ANY, _("MOB"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonMOB = new wxToggleButton( sbSizer3->GetStaticBox(), wxID_ANY, _("MOB"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonMOB->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Arial") ) );
 	m_buttonMOB->SetBackgroundColour( wxColour( 0, 255, 0 ) );
-	m_buttonMOB->SetToolTip( _("MOB") );
-	m_buttonMOB->SetMinSize( wxSize( 50,-1 ) );
+	m_buttonMOB->SetToolTip( _("SART") );
 
 	fgSizer3->Add( m_buttonMOB, 0, wxALL|wxEXPAND, 5 );
 
@@ -350,7 +349,7 @@ ShipDriverBase::ShipDriverBase( wxWindow* parent, wxWindowID id, const wxString&
 	m_buttonPlus10->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnPlus10 ), NULL, this );
 	m_buttonPlus1->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnPlus1 ), NULL, this );
 	m_buttonSART->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnSART ), NULL, this );
-	m_buttonMOB->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnStandby ), NULL, this );
+	m_buttonMOB->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnMOB ), NULL, this );
 	m_buttonEPIRB->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnStandby ), NULL, this );
 	m_buttonDSCAlert->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnStandby ), NULL, this );
 	m_buttonDSCRelay->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnStandby ), NULL, this );
@@ -372,7 +371,7 @@ ShipDriverBase::~ShipDriverBase()
 	m_buttonPlus10->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnPlus10 ), NULL, this );
 	m_buttonPlus1->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnPlus1 ), NULL, this );
 	m_buttonSART->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnSART ), NULL, this );
-	m_buttonMOB->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnStandby ), NULL, this );
+	m_buttonMOB->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnMOB ), NULL, this );
 	m_buttonEPIRB->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnStandby ), NULL, this );
 	m_buttonDSCAlert->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnStandby ), NULL, this );
 	m_buttonDSCRelay->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnStandby ), NULL, this );

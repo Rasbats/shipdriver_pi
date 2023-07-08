@@ -60,7 +60,7 @@ class ShipDriverBase : public wxDialog
 		wxButton* m_buttonPlus10;
 		wxButton* m_buttonPlus1;
 		wxToggleButton* m_buttonSART;
-		wxButton* m_buttonMOB;
+		wxToggleButton* m_buttonMOB;
 		wxButton* m_buttonEPIRB;
 		wxButton* m_buttonDSCAlert;
 		wxButton* m_buttonDSCRelay;
@@ -78,6 +78,7 @@ class ShipDriverBase : public wxDialog
 		virtual void OnPlus10( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPlus1( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSART( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMOB( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTimer( wxTimerEvent& event ) { event.Skip(); }
 
 

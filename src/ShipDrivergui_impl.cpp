@@ -428,14 +428,12 @@ void Dlg::Notify()
     wxString myNMEAais = myAIS->nmeaEncode(_T("18"), m_iMMSI, _T("5"), initSpd,
         initLat, initLon, myDir, myDir, _T("B"), timeStamp);
 
-    SART_active = m_buttonSART->GetValue();
-    
-
-    if (m_bSART) {
-        wxString notMID = m_tMMSI.Mid(3);
-        wxString SARTid = "970" + notMID;
-
-        int SARTint = wxAtoi(SARTid);
+    // SART alarm
+    wxString notMID = m_tMMSI.Mid(3);
+    wxString SARTid = "970" + notMID;
+    int SARTint = wxAtoi(SARTid);
+   
+    if (m_bSART) {       
         myNMEA_SART = myAIS->nmeaEncode1_2_3(
             1, SARTint, 14, initSpd, initLat, initLon, myDir, myDir, _T("B"));
 
@@ -443,14 +441,11 @@ void Dlg::Notify()
         PushNMEABuffer(myNMEA_SART + _T("\r\n"));
     } else if (SART_stop_count < 5){
         SART_stop_count++;
-        wxString notMID = m_tMMSI.Mid(3);
-        wxString SARTid = "970" + notMID;
-        
-        int SARTint = wxAtoi(SARTid);
+
         myNMEA_SART = myAIS->nmeaEncode1_2_3(
             1, SARTint, 15, initSpd, initLat, initLon, myDir, myDir, _T("B"));
 
-        m_textCtrlSART->SetValue(myNMEA_SART);
+        m_textCtrlSART->SetValue(myNMEA_SART); // for analysis of sentence
         PushNMEABuffer(myNMEA_SART + _T("\r\n"));
     }
 
