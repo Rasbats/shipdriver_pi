@@ -31,6 +31,7 @@
 #include <wx/textfile.h>
 #include <wx/timer.h>
 #include <wx/wx.h>
+#include "wx/tglbtn.h"
 
 #include "qtstylesheet.h"
 #include "ShipDrivergui_impl.h"
