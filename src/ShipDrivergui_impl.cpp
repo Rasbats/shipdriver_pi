@@ -70,6 +70,9 @@ Dlg::Dlg(wxWindow* parent, wxWindowID id, const wxString& title,
     m_bSART = false;
     m_bDISTRESS = false;
     m_bCANCEL = false;
+    m_bDISTRESSRELAY = false;
+    m_bRELAYCANCEL = false;
+
     stop_count = 999;
     stop_countMOB = 999;
     stop_countEPIRB = 999;
@@ -449,6 +452,51 @@ void Dlg::OnDistressCancel(wxCommandEvent& event)
     } else
         wxMessageBox("ShipDriver has not been started");
 }
+
+void Dlg::OnDistressRelay(wxCommandEvent& event)
+{
+    if (m_Timer->IsRunning()) {
+
+        bool active = m_buttonDistressRelay->GetValue();
+        alarm_id = 984;
+        if (active) {
+            m_bDISTRESSRELAY = true;
+            m_buttonDistressRelay->SetBackgroundColour(wxColour(255, 0, 0));
+        } else {
+            stop_countDISTRESSRELAY = 0;
+            m_bDISTRESSRELAY = false;
+            m_buttonDistressRelay->SetBackgroundColour(wxColour(0, 255, 0));
+        }
+    } else
+        wxMessageBox("ShipDriver has not been started");
+}
+
+void Dlg::OnRelayCancel(wxCommandEvent& event)
+{
+    if (m_Timer->IsRunning()) {
+
+        bool active = m_buttonRelayCancel->GetValue();
+        alarm_id = 986;
+        if (active) {
+            if (!m_bDISTRESSRELAY) {
+                wxMessageBox("No DSC Distress activated");
+                return;
+            }
+            m_bRELAYCANCEL = true;
+            m_buttonRelayCancel->SetBackgroundColour(wxColour(255, 0, 0));
+            if (m_bDISTRESSRELAY) {
+                m_bDISTRESSRELAY = false;
+                m_buttonDistressRelay->SetBackgroundColour(wxColour(0, 255, 0));
+            }
+
+        } else {
+            m_bRELAYCANCEL = false;
+            m_buttonRelayCancel->SetBackgroundColour(wxColour(0, 255, 0));
+        }
+    } else
+        wxMessageBox("ShipDriver has not been started");
+}
+
 void Dlg::OnClose(wxCloseEvent& event)
 {
     if (m_Timer->IsRunning())
@@ -521,11 +569,10 @@ void Dlg::Notify()
     wxString myNMEAais = myAIS->nmeaEncode(_T("18"), m_iMMSI, _T("5"), initSpd,
         initLat, initLon, myDir, myDir, _T("B"), timeStamp);
 
-    
     wxString notMID = m_tMMSI.Mid(3);
 
     switch (alarm_id) {
-    case 970:        
+    case 970:
         SARTid = "970" + notMID;
         SARTint = wxAtoi(SARTid);
 
@@ -572,44 +619,66 @@ void Dlg::Notify()
         EPIRBint = wxAtoi(EPIRBid);
 
         if (m_bEPIRB) {
-            myNMEA_EPIRB = myAIS->nmeaEncode1_2_3(1, EPIRBint, 14, initSpd, initLat,
-                initLon, myDir, myDir, _T("B"));
+            myNMEA_EPIRB = myAIS->nmeaEncode1_2_3(1, EPIRBint, 14, initSpd,
+                initLat, initLon, myDir, myDir, _T("B"));
 
             m_textCtrlSART->SetValue(myNMEA_EPIRB);
             PushNMEABuffer(myNMEA_EPIRB + _T("\r\n"));
         } else if (stop_countEPIRB < 5) {
             stop_countEPIRB++;
 
-            myNMEA_EPIRB = myAIS->nmeaEncode1_2_3(1, EPIRBint, 15, initSpd, initLat,
-                initLon, myDir, myDir, _T("B"));
+            myNMEA_EPIRB = myAIS->nmeaEncode1_2_3(1, EPIRBint, 15, initSpd,
+                initLat, initLon, myDir, myDir, _T("B"));
 
             m_textCtrlSART->SetValue(myNMEA_EPIRB); // for analysis of sentence
             PushNMEABuffer(myNMEA_EPIRB + _T("\r\n"));
         }
-        break;  
-     case 980:
+        break;
+    case 980:
         if (m_bDISTRESS) {
             myNMEA_DISTRESS = createDSCAlertSentence(
                 initLat, initLon, m_iMMSI, "05", timeStamp);
 
             m_textCtrlSART->SetValue(myNMEA_DISTRESS);
 
-            wxString DSCexpansion = createDSCExpansionSentence(initLat, initLon, m_iMMSI);
+            wxString DSCexpansion
+                = createDSCExpansionSentence(initLat, initLon, m_iMMSI);
 
             PushNMEABuffer(myNMEA_DISTRESS + _T("\r\n"));
             PushNMEABuffer(DSCexpansion + _T("\r\n"));
-        } 
-        break;   
+        }
+        break;
     case 982:
-        if (m_bCANCEL && m_bDISTRESS) {           
-           myNMEA_CANCEL
-                = createDSCAlertCancelSentence(initLat, initLon, m_iMMSI, "05", timeStamp);
+        if (m_bCANCEL && m_bDISTRESS) {
+            myNMEA_CANCEL = createDSCAlertCancelSentence(
+                initLat, initLon, m_iMMSI, "05", timeStamp);
 
             m_textCtrlSART->SetValue(myNMEA_CANCEL);
             PushNMEABuffer(myNMEA_CANCEL + _T("\r\n"));
+        }
+        break;
+    case 984:
+        if (m_bDISTRESSRELAY) {
+            myNMEA_DISTRESSRELAY = createDSCAlertRelaySentence(
+                49.9, -5.9, m_iMMSI, 503110520, "05", "1800");
+            m_textCtrlSART->SetValue(myNMEA_DISTRESSRELAY);
 
-        } 
-        break;           
+            wxString DSCexpansion
+                = createDSCExpansionSentence(initLat, initLon, m_iMMSI);
+
+            PushNMEABuffer(myNMEA_DISTRESSRELAY + _T("\r\n"));
+            PushNMEABuffer(DSCexpansion + _T("\r\n"));
+        }
+        break;
+    case 986:
+        if (m_bRELAYCANCEL && m_bDISTRESSRELAY) {
+            myNMEA_RELAYCANCEL = createDSCAlertRelayCancelSentence(
+                49.9, -5.9, m_iMMSI, 503110520, "05", "1800");
+
+            m_textCtrlSART->SetValue(myNMEA_RELAYCANCEL);
+            PushNMEABuffer(myNMEA_RELAYCANCEL + _T("\r\n"));
+        }
+        break;
     }
     /*
     wxString testDSCalert
@@ -1267,6 +1336,189 @@ wxString Dlg::createDSCAlertCancelSentence(double lat, double lon, int mmsi, wxS
     return nFinal;
 
 
+}
+
+wxString Dlg::createDSCAlertRelaySentence(double lat, double lon, int mmsi, int dmmsi, wxString nature, wxString time)
+{
+    // 1      2  3          4  5  6  7          8    9          10 11 12 13
+    // |      |  |          |  |  |  |          |    |          |  |  |  |
+    // $CDDSC,12,3380400790,12,12,00,1423108312,2019,5031105200,05,S, E* 6A
+
+    wxString nNS;
+    wxString nEW;
+    wxString nLatLon;
+    wxString nMMSI;
+    wxString dMMSI;
+    wxString nTime;
+    wxString nQLat;
+    wxString nQLon;
+
+    wxString ndlr = _T("$");
+    wxString nast = _T("*");
+
+    wxString nForCheckSum;
+    wxString nFinal;
+
+    wxString nC = ",";
+    wxString nDSC = "CDDSC";
+
+    nNS = LatitudeToString(lat);
+    nEW = LongitudeToString(lon);
+
+    nQLat = nNS.at(nNS.length() - 2);
+    nQLon = nEW.at(nEW.length() - 2);
+
+    wxString nQ = nQLat + nQLon;
+    wxString quadrant;
+
+    /*
+       - quadrant NE is indicated by the digit “0”,
+       – quadrant NW is indicated by the digit “1”,
+       – quadrant SE is indicated by the digit “2”,
+       – quadrant SW is indicated by the digit “3
+   */
+    if (nQ == "NE")
+        quadrant = "0";
+    else if (nQ == "NW")
+        quadrant = "1";
+    else if (nQ == "SE")
+        quadrant = "2";
+    else if (nQ == "SW")
+        quadrant = "3";
+
+    nNS = nNS.Mid(0, 4);
+    nEW = nEW.Mid(0, 5);
+    nLatLon = quadrant + nNS + nEW;
+
+    nMMSI = wxString::Format("%i", mmsi) + "0";
+    dMMSI = wxString::Format("%i", dmmsi) + "0";
+
+    nTime = time;
+    nTime = nTime.Mid(0, 4);
+
+    nForCheckSum = nDSC + nC + "16" + nC + nMMSI + nC + "12" + nC + "12" + nC
+        + "00" + nC + nLatLon + nC + time + nC + dMMSI + nC + nature + nC + "S" + nC
+        + "E";
+
+    nFinal = ndlr + nForCheckSum + nast + makeCheckSum(nForCheckSum);
+
+    return nFinal;
+}
+/*
+wxString Dlg::createDSCAlertCancelSentence(double lat, double lon, int mmsi, wxString nature, wxString time)
+{ 
+
+//    1      2  3           4   5   6   7           8     9          10 11 12  13 
+//    |      |  |           |   |   |   |           |     |          |  |  |    | 
+ //   $CDDSC,12,3381581370, 12, 06, 00, 1423108312, 0236, 3381581370, , S,    *20
+
+    wxString nNS;
+    wxString nEW;
+    wxString nLatLon;
+    wxString nMMSI;
+    wxString nTime;
+    wxString nQLat;
+    wxString nQLon;
+
+    wxString ndlr = _T("$");
+    wxString nast = _T("*");
+
+    wxString nForCheckSum;
+    wxString nFinal;
+
+    wxString nC = ",";
+    wxString nDSC = "CDDSC";
+
+    nNS = LatitudeToString(lat);
+    nEW = LongitudeToString(lon);
+
+    nQLat = nNS.at(nNS.length() - 2);
+    nQLon = nEW.at(nEW.length() - 2);
+
+    wxString nQ = nQLat + nQLon;
+    wxString quadrant;
+
+    if (nQ == "NE")
+        quadrant = "0";
+    else if (nQ == "NW")
+        quadrant = "1";
+    else if (nQ == "SE")
+        quadrant = "2";
+    else if (nQ == "SW")
+        quadrant = "3";
+
+    nNS = nNS.Mid(0, 4);
+    nEW = nEW.Mid(0, 5);
+    nLatLon = quadrant + nNS + nEW;
+
+    nMMSI = wxString::Format("%i", mmsi) + "0";
+
+    nForCheckSum = nDSC + nC + "12" + nC + nMMSI + nC + nature + nC + "00" + nC + nLatLon + nC + time + nC + nMMSI + nC + nC + "S" + nC;
+
+    nFinal = ndlr + nForCheckSum + nast + makeCheckSum(nForCheckSum);
+
+    return nFinal;
+
+
+}
+*/
+wxString Dlg::createDSCAlertRelayCancelSentence(double lat, double lon, int mmsi, int dmmsi, wxString nature, wxString time)
+{
+
+    //    1      2  3           4   5   6   7           8     9          10 11
+    //    12  13 |      |  |           |   |   |   |           |     | |  |  | |
+    //   $CDDSC,12,3381581370, 12, 06, 00, 1423108312, 0236, 3381581370, , S,
+    //   *20
+
+    wxString nNS;
+    wxString nEW;
+    wxString nLatLon;
+    wxString nMMSI;
+    wxString dMMSI;
+    wxString nTime;
+    wxString nQLat;
+    wxString nQLon;
+
+    wxString ndlr = _T("$");
+    wxString nast = _T("*");
+
+    wxString nForCheckSum;
+    wxString nFinal;
+
+    wxString nC = ",";
+    wxString nDSC = "CDDSC";
+
+    nNS = LatitudeToString(lat);
+    nEW = LongitudeToString(lon);
+
+    nQLat = nNS.at(nNS.length() - 2);
+    nQLon = nEW.at(nEW.length() - 2);
+
+    wxString nQ = nQLat + nQLon;
+    wxString quadrant;
+
+    if (nQ == "NE")
+        quadrant = "0";
+    else if (nQ == "NW")
+        quadrant = "1";
+    else if (nQ == "SE")
+        quadrant = "2";
+    else if (nQ == "SW")
+        quadrant = "3";
+
+    nNS = nNS.Mid(0, 4);
+    nEW = nEW.Mid(0, 5);
+    nLatLon = quadrant + nNS + nEW;
+
+    nMMSI = wxString::Format("%i", mmsi) + "0";
+    dMMSI = wxString::Format("%i", dmmsi) + "0";
+
+    nForCheckSum = nDSC + nC + "12" + nC + nMMSI + nC + nature + nC + "00" + nC
+        + nLatLon + nC + time + nC + dMMSI + nC + nC + "S" + nC;
+
+    nFinal = ndlr + nForCheckSum + nast + makeCheckSum(nForCheckSum);
+
+    return nFinal;
 }
 
 wxString Dlg::makeCheckSum(wxString mySentence)

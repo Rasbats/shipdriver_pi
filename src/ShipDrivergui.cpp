@@ -310,6 +310,20 @@ ShipDriverBase::ShipDriverBase( wxWindow* parent, wxWindowID id, const wxString&
 
 	fgSizer5->Add( m_buttonDistressCancel, 0, wxALL, 5 );
 
+	m_buttonDistressRelay = new wxToggleButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Distress Relay"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonDistressRelay->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Arial") ) );
+	m_buttonDistressRelay->SetBackgroundColour( wxColour( 0, 255, 0 ) );
+	m_buttonDistressRelay->SetToolTip( _("Distress Alert") );
+
+	fgSizer5->Add( m_buttonDistressRelay, 0, wxALL|wxEXPAND, 5 );
+
+	m_buttonRelayCancel = new wxToggleButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Relay Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRelayCancel->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Arial") ) );
+	m_buttonRelayCancel->SetBackgroundColour( wxColour( 0, 255, 0 ) );
+	m_buttonRelayCancel->SetToolTip( _("Distress Cancel") );
+
+	fgSizer5->Add( m_buttonRelayCancel, 0, wxALL|wxEXPAND, 5 );
+
 
 	sbSizer3->Add( fgSizer5, 1, wxEXPAND, 5 );
 
@@ -350,6 +364,8 @@ ShipDriverBase::ShipDriverBase( wxWindow* parent, wxWindowID id, const wxString&
 	m_buttonEPIRB->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnEPIRB ), NULL, this );
 	m_buttonDistressAlert->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnDistressAlert ), NULL, this );
 	m_buttonDistressCancel->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnDistressCancel ), NULL, this );
+	m_buttonDistressRelay->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnDistressRelay ), NULL, this );
+	m_buttonRelayCancel->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnRelayCancel ), NULL, this );
 	this->Connect( wxID_ANY, wxEVT_TIMER, wxTimerEventHandler( ShipDriverBase::OnTimer ) );
 }
 
@@ -372,6 +388,8 @@ ShipDriverBase::~ShipDriverBase()
 	m_buttonEPIRB->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnEPIRB ), NULL, this );
 	m_buttonDistressAlert->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnDistressAlert ), NULL, this );
 	m_buttonDistressCancel->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnDistressCancel ), NULL, this );
+	m_buttonDistressRelay->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnDistressRelay ), NULL, this );
+	m_buttonRelayCancel->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnRelayCancel ), NULL, this );
 	this->Disconnect( wxID_ANY, wxEVT_TIMER, wxTimerEventHandler( ShipDriverBase::OnTimer ) );
 
 }

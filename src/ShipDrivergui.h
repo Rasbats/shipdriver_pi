@@ -64,6 +64,8 @@ class ShipDriverBase : public wxDialog
 		wxToggleButton* m_buttonEPIRB;
 		wxToggleButton* m_buttonDistressAlert;
 		wxToggleButton* m_buttonDistressCancel;
+		wxToggleButton* m_buttonDistressRelay;
+		wxToggleButton* m_buttonRelayCancel;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
@@ -82,6 +84,8 @@ class ShipDriverBase : public wxDialog
 		virtual void OnEPIRB( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDistressAlert( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDistressCancel( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDistressRelay( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRelayCancel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTimer( wxTimerEvent& event ) { event.Skip(); }
 
 

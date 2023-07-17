@@ -128,7 +128,8 @@ public:
     wxString createDSCAlertSentence(double lat, double lon, int mmsi, wxString nature, wxString time);
     wxString createDSCExpansionSentence(double lat, double lon, int mmsi);
     wxString createDSCAlertCancelSentence(double lat, double lon, int mmsi, wxString nature, wxString time);
-    
+    wxString createDSCAlertRelaySentence(double lat, double lon, int mmsi, int dmmsi, wxString nature, wxString time);   
+    wxString createDSCAlertRelayCancelSentence(double lat, double lon, int mmsi, int dmmsi, wxString nature, wxString time);
 
     wxString LatitudeToString(double mLat);
     wxString LongitudeToString(double mLon);
@@ -234,6 +235,8 @@ private:
     bool m_bEPIRB;
     bool m_bDISTRESS;
     bool m_bCANCEL;
+    bool m_bDISTRESSRELAY;
+    bool m_bRELAYCANCEL;
 
 
     wxString SARTid;
@@ -253,12 +256,17 @@ private:
     wxString myNMEA_EPIRB;
     wxString myNMEA_DISTRESS;
     wxString myNMEA_CANCEL;
+    wxString myNMEA_DISTRESSRELAY;
+    wxString myNMEA_RELAYCANCEL;
+
 
     int stop_count;
     int stop_countMOB;
     int stop_countEPIRB;
     int stop_countDISTRESS;
     int stop_countCANCEL;
+    int stop_countDISTRESSRELAY;
+    int stop_countRELAYCANCEL;
 
     double m_latMOB;
     double m_lonMOB;
@@ -268,6 +276,8 @@ private:
     void OnEPIRB(wxCommandEvent& event);
     void OnDistressAlert(wxCommandEvent& event);
     void OnDistressCancel(wxCommandEvent& event);
+    void OnDistressRelay(wxCommandEvent& event);
+    void OnRelayCancel(wxCommandEvent& event);
 
     long m_iMMSI;
 
