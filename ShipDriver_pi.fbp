@@ -1443,11 +1443,11 @@
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
                                 <property name="focus"></property>
-                                <property name="font"></property>
+                                <property name="font">Arial,90,400,12,74,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label"></property>
+                                <property name="label">Follow</property>
                                 <property name="margins"></property>
                                 <property name="markup">0</property>
                                 <property name="max_size"></property>
@@ -1480,6 +1480,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnButtonClick">OnFollow</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
