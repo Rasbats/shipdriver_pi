@@ -367,7 +367,7 @@ void Dlg::OnSART(wxCommandEvent& event)
             m_buttonSART->SetBackgroundColour(wxColour(0, 255, 0));           
         }
     } else
-        wxMessageBox("ShipDriver has not been started");
+        wxMessageBox(_("ShipDriver has not been started"));
 }
 
 void Dlg::OnMOB(wxCommandEvent& event)
@@ -387,7 +387,7 @@ void Dlg::OnMOB(wxCommandEvent& event)
             m_buttonMOB->SetBackgroundColour(wxColour(0, 255, 0));
         }
     } else
-        wxMessageBox("ShipDriver has not been started");
+        wxMessageBox(_("ShipDriver has not been started"));
 }
 
 void Dlg::OnEPIRB(wxCommandEvent& event)
@@ -405,7 +405,7 @@ void Dlg::OnEPIRB(wxCommandEvent& event)
             m_buttonEPIRB->SetBackgroundColour(wxColour(0, 255, 0));
         }
     } else
-        wxMessageBox("ShipDriver has not been started");
+        wxMessageBox(_("ShipDriver has not been started"));
 }
 
 void Dlg::OnDistressAlert(wxCommandEvent& event)
@@ -424,7 +424,7 @@ void Dlg::OnDistressAlert(wxCommandEvent& event)
             m_buttonDistressAlert->SetBackgroundColour(wxColour(0, 255, 0));
         }
     } else
-        wxMessageBox("ShipDriver has not been started");
+        wxMessageBox(_("ShipDriver has not been started"));
 }
 
 void Dlg::OnDistressCancel(wxCommandEvent& event)
@@ -435,7 +435,7 @@ void Dlg::OnDistressCancel(wxCommandEvent& event)
         alarm_id = 982;
         if (active) {            
             if (!m_bDISTRESS) { 
-                wxMessageBox("No DSC Distress activated");
+                wxMessageBox(_("No DSC Distress activated"));
                 return;
             }
             m_bCANCEL = true;
@@ -450,7 +450,7 @@ void Dlg::OnDistressCancel(wxCommandEvent& event)
             m_buttonDistressCancel->SetBackgroundColour(wxColour(0, 255, 0));
         }
     } else
-        wxMessageBox("ShipDriver has not been started");
+        wxMessageBox(_("ShipDriver has not been started"));
 }
 
 void Dlg::OnDistressRelay(wxCommandEvent& event)
@@ -468,7 +468,7 @@ void Dlg::OnDistressRelay(wxCommandEvent& event)
             m_buttonDistressRelay->SetBackgroundColour(wxColour(0, 255, 0));
         }
     } else
-        wxMessageBox("ShipDriver has not been started");
+        wxMessageBox(_("ShipDriver has not been started"));
 }
 
 void Dlg::OnRelayCancel(wxCommandEvent& event)
@@ -479,7 +479,7 @@ void Dlg::OnRelayCancel(wxCommandEvent& event)
         alarm_id = 986;
         if (active) {
             if (!m_bDISTRESSRELAY) {
-                wxMessageBox("No DSC Distress activated");
+                wxMessageBox(_("No DSC Distress activated"));
                 return;
             }
             m_bRELAYCANCEL = true;
@@ -494,7 +494,7 @@ void Dlg::OnRelayCancel(wxCommandEvent& event)
             m_buttonRelayCancel->SetBackgroundColour(wxColour(0, 255, 0));
         }
     } else
-        wxMessageBox("ShipDriver has not been started");
+        wxMessageBox(_("ShipDriver has not been started"));
 }
 
 void Dlg::OnClose(wxCloseEvent& event)
@@ -528,10 +528,10 @@ void Dlg::Notify()
         myDir += initRudder;
         m_gaugeRudderStbd->SetValue(myRudder);
         if (myRudder == 0) {
-            m_textCtrlRudderStbd->SetValue(_T(""));
+            m_textCtrlRudderStbd->SetValue("");
         } else {
             m_textCtrlRudderStbd->SetValue(
-                wxString::Format(_T("%.0f"), myRudder) + _T(" S"));
+                wxString::Format(_T("%.0f"), myRudder) + " S");
         }
         m_gaugeRudderPort->SetValue(0);
         m_textCtrlRudderPort->SetValue(_T(""));
@@ -553,7 +553,7 @@ void Dlg::Notify()
         }
     }
 
-    m_stSpeed->SetLabel(wxString::Format(_T("%3.1f"), initSpd));
+    m_stSpeed->SetLabel(wxString::Format("%3.1f", initSpd));
 
     if (!m_bUsingFollow) {
 
@@ -564,10 +564,10 @@ void Dlg::Notify()
             initLat, initLon, myDir, initSpd / 7200, stepLat, stepLon);
     }
 
-    wxString timeStamp = wxString::Format(_T("%i"), wxGetUTCTime());
+    wxString timeStamp = wxString::Format("%i", wxGetUTCTime());
 
-    wxString myNMEAais = myAIS->nmeaEncode(_T("18"), m_iMMSI, _T("5"), initSpd,
-        initLat, initLon, myDir, myDir, _T("B"), timeStamp);
+    wxString myNMEAais = myAIS->nmeaEncode("18", m_iMMSI, "5", initSpd,
+        initLat, initLon, myDir, myDir, "B", timeStamp);
 
     wxString notMID = m_tMMSI.Mid(3);
 
@@ -578,7 +578,7 @@ void Dlg::Notify()
 
         if (m_bSART) {
             myNMEA_SART = myAIS->nmeaEncode1_2_3(1, SARTint, 14, initSpd,
-                initLat, initLon, myDir, myDir, _T("B"));
+                initLat, initLon, myDir, myDir, "B");
 
             m_textCtrlSART->SetValue(myNMEA_SART);
             PushNMEABuffer(myNMEA_SART + _T("\r\n"));
@@ -586,7 +586,7 @@ void Dlg::Notify()
             stop_count++;
 
             myNMEA_SART = myAIS->nmeaEncode1_2_3(1, SARTint, 15, initSpd,
-                initLat, initLon, myDir, myDir, _T("B"));
+                initLat, initLon, myDir, myDir, "B");
 
             m_textCtrlSART->SetValue(myNMEA_SART); // for analysis of sentence
             PushNMEABuffer(myNMEA_SART + _T("\r\n"));
@@ -599,7 +599,7 @@ void Dlg::Notify()
 
         if (m_bMOB) {
             myNMEA_MOB = myAIS->nmeaEncode1_2_3(1, MOBint, 14, initSpd,
-                m_latMOB, m_lonMOB, myDir, myDir, _T("B"));
+                m_latMOB, m_lonMOB, myDir, myDir, "B");
 
             m_textCtrlSART->SetValue(myNMEA_MOB);
             PushNMEABuffer(myNMEA_MOB + _T("\r\n"));
@@ -607,7 +607,7 @@ void Dlg::Notify()
             stop_countMOB++;
 
             myNMEA_MOB = myAIS->nmeaEncode1_2_3(1, MOBint, 15, initSpd,
-                m_latMOB, m_lonMOB, myDir, myDir, _T("B"));
+                m_latMOB, m_lonMOB, myDir, myDir, "B");
 
             m_textCtrlSART->SetValue(myNMEA_MOB); // for analysis of sentence
             PushNMEABuffer(myNMEA_MOB + _T("\r\n"));
@@ -620,7 +620,7 @@ void Dlg::Notify()
 
         if (m_bEPIRB) {
             myNMEA_EPIRB = myAIS->nmeaEncode1_2_3(1, EPIRBint, 14, initSpd,
-                initLat, initLon, myDir, myDir, _T("B"));
+                initLat, initLon, myDir, myDir, "B");
 
             m_textCtrlSART->SetValue(myNMEA_EPIRB);
             PushNMEABuffer(myNMEA_EPIRB + _T("\r\n"));
@@ -628,7 +628,7 @@ void Dlg::Notify()
             stop_countEPIRB++;
 
             myNMEA_EPIRB = myAIS->nmeaEncode1_2_3(1, EPIRBint, 15, initSpd,
-                initLat, initLon, myDir, myDir, _T("B"));
+                initLat, initLon, myDir, myDir, "B");
 
             m_textCtrlSART->SetValue(myNMEA_EPIRB); // for analysis of sentence
             PushNMEABuffer(myNMEA_EPIRB + _T("\r\n"));
@@ -680,18 +680,7 @@ void Dlg::Notify()
         }
         break;
     }
-    /*
-    wxString testDSCalert
-        = createDSCAlertSentence(initLat, initLon, m_iMMSI, "05", timeStamp);
-    wxString testDSCexpand
-        = createDSCExpansionSentence(initLat, initLon, m_iMMSI);
 
-   // wxString testDSC = "$CDDSC,12,3380400790,12,06,00,2335015115,0925,,,S,E*65";
-   // wxString testDSC1 = "$CDDSE,1,1,A,3380400790,00,45004400*17";
-
-    PushNMEABuffer(testDSCalert + _T("\r\n"));
-    PushNMEABuffer(testDSCexpand + _T("\r\n"));
-*/
     if (m_bUseFile)
         nmeafile->AddLine(myNMEAais);
 
@@ -719,12 +708,12 @@ void Dlg::Notify()
     VTG = createVTGSentence(initSpd, myDir);
     VHW = createVHWSentence(initSpd, myDir);
 
-    PushNMEABuffer(GLL + _T("\r\n"));
-    PushNMEABuffer(VTG + _T("\r\n"));
-    PushNMEABuffer(VHW + _T("\r\n"));
+    PushNMEABuffer(GLL + "\r\n");
+    PushNMEABuffer(VTG + "\r\n");
+    PushNMEABuffer(VHW + "\r\n");
 
     if (m_bUseAis) {
-        PushNMEABuffer(myNMEAais + _T("\r\n"));        
+        PushNMEABuffer(myNMEAais + "\r\n");        
     }
     initLat = stepLat;
     initLon = stepLon;
