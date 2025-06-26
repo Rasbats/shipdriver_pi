@@ -658,6 +658,7 @@ void Dlg::OnClose(wxCloseEvent& event) {
   if (m_timer->IsRunning()) m_timer->Stop();
   plugin->OnShipDriverDialogClose();
 }
+
 void Dlg::Notify() {
   wxString mySentence;
   plugin->SetNMEASentence(mySentence);
@@ -875,7 +876,7 @@ void Dlg::Notify() {
   VHW = createVHWSentence(initSpd, myDir);
   RMC = createRMCSentence(mdt, initLat, initLon, initSpd, myDir);
   HDT = createHDTSentence(myDir);
-  MDBT = createDBTSentence(1.0);
+  MDBT = createDBTSentence(10.0);
 
   PushNMEABuffer(GLL + "\r\n");
   PushNMEABuffer(VTG + "\r\n");
@@ -1623,41 +1624,38 @@ wxString Dlg::createDSCAlertRelayCancelSentence(double lat, double lon,
   return nFinal;
 }
 
-/*
-$--DBT,a.a,F,b.b,M,c.c,F*hh<CR><LF>
 
-    $--: Talker identifier*
-    DBT: Sentence formatter*
-    a.a,F: Water depth, feet*
-    b.b,M: Water depth, meters*
-    c.c,F: Water depth, fathoms*
-    *hh: Checksum*
+wxString Dlg::createDBTSentence(double myDepthMeter) {
+  /*
+  $--DBT,a.a,F,b.b,M,c.c,F*hh<CR><LF>
 
-*/
-wxString Dlg::createDBTSentence(double myDepth) {
-  wxString nDepth;
-  wxString nDir;
-  wxString nTime;
-  wxString nDate;
-  wxString nValid;
+   $--: Talker identifier*
+   DBT: Sentence formatter*
+   a.a,F: Water depth, feet*
+   b.b,M: Water depth, meters*
+   c.c,F: Water depth, fathoms*
+   *hh: Checksum*
+   */
+
+  wxString nDBT = "IIDBT";
+  wxString nDepthMeter;
+  wxString nDepthFeet;
+  wxString nDepthFathom;
   wxString nForCheckSum;
   wxString nFinal;
   wxString nC = ",";
-  wxString nA = "A";
-  wxString nT = "T,";
-  wxString nM = "M,";
-  wxString nN = "N,";
-  wxString nK = "K,";
-  wxString nF = "F";
-
-  wxString nDeep = "IIDBT,";
-  nValid = "A,A";
+  wxString nFeet = "f";
+  wxString nMeter = "M";
+  wxString nFathom = "F";
   wxString ndlr = "$";
   wxString nast = "*";
 
-  nDepth = wxString::Format("%f", myDepth);
+  nDepthMeter = wxString::Format("%f", myDepthMeter);
+  nDepthFeet = wxString::Format("%f", myDepthMeter * METER_2_FEET);
+  nDepthFathom = wxString::Format("%f", myDepthMeter * METER_2_FATHOM);
 
-  nForCheckSum = nDeep + nC + nC + nDepth + nC + nM + nC + nF;
+  nForCheckSum =
+      nDBT + nC + nDepthFeet + nC + nFeet + nC + nDepthMeter + nC + nMeter + nC + nDepthFathom + nC + nFathom;
 
   nFinal = ndlr + nForCheckSum + nast + makeCheckSum(nForCheckSum);
 
@@ -1735,6 +1733,7 @@ wxString Dlg::LatitudeToString(double mLat) {
 
   return returnLat;
 }
+
 double StringToLongitude(wxString mLon) {
   wxString mBitLon = "";
   wxString mDecLon;
