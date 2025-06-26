@@ -1301,7 +1301,8 @@ wxString Dlg::createVTGSentence(double mySpd, double myDir) {
   nSpd = wxString::Format("%f", mySpd);
   nDir = wxString::Format("%f", myDir);
 
-  nForCheckSum = nVTG + nDir + nC + nT + nC + nM + nSpd + nN + nC + nC + nA;
+  nForCheckSum =
+      nVTG + nDir + nC + nT + nC + nM + nSpd + nC + nN + nC + nC + nA;
 
   nFinal = ndlr + nForCheckSum + nast + makeCheckSum(nForCheckSum);
   // wxMessageBox(nFinal);
