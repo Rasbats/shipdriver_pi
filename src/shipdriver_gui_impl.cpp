@@ -988,35 +988,34 @@ wxString Dlg::createVHWSentence(double stw, double hdg) {
   2) T = True
   3) Degrees Magnetic
   4) M = Magnetic
-  5) Knots(speed of vessel relative to the water)
+  5) Knots (speed of vessel relative to the water)
   6) N = Knots
-  7) Kilometers (speed of vessel relative to the water)
-  8) K = Kilometres
+  7) Km/h (speed of vessel relative to the water)
+  8) K = Kilometers per hour
   9) Checksum
   */
-  wxString nVHW;
+
+  wxString nVHW = "IIVHW";
   wxString nDir;
-  wxString nTrue;
-  wxString nMag;
-  wxString nSpd;
-  wxString nValid;
+  wxString nTrue = "T";
+  wxString nMag = "M";
+  wxString nSpdN;
+  wxString nSpdK;
   wxString nForCheckSum;
   wxString nFinal;
-  wxString nUnits;
+  wxString nN = "N";
+  wxString nK = "K";
   wxString nC = ",";
-  wxString nA = "A";
-  nUnits = "N";
-  nVHW = "IIVHW";
-  nTrue = "T";
-  nMag = "M";
   wxString ndlr = "$";
   wxString nast = "*";
 
-  nSpd = wxString::Format("%f", stw);
+  nSpdN = wxString::Format("%f", stw);
+  nSpdK = wxString::Format("%f", stw * KNOT_2_KPH);
   nDir = wxString::Format("%f", hdg);
 
-  nForCheckSum = nVHW + nC + nDir + nC + nTrue + nC + nC + nMag + nC + nSpd +
-                 nC + nUnits + nC + nC + "K";
+  nForCheckSum = nVHW + nC + nDir + nC + nTrue + nC + nC + nMag + nC + nSpdN +
+                 nC + nN + nC + nSpdK + nC + nK;
+
   nFinal = ndlr + nForCheckSum + nast + makeCheckSum(nForCheckSum);
   return nFinal;
 }
