@@ -59,7 +59,10 @@
 
 #define ID_SOMETHING 2001
 #define ID_SOMETHING_ELSE 2002
+
 #define KNOT_2_KPH 1.852
+#define METER_2_FEET 3.280839895
+#define METER_2_FATHOM 0.5468066492
 
 #ifdef __WXOSX__
 #define SHIPDRIVER_DLG_STYLE \
@@ -135,6 +138,7 @@ public:
                              double mySpd, double myDir);
   wxString createVTGSentence(double mySpd, double myDir);
   wxString createHDTSentence(double myDir);
+  wxString createDBTSentence(double myDepthMeter);
 
   // DSC Sentences
   wxString createDSCAlertSentence(double lat, double lon, int mmsi,
@@ -336,8 +340,6 @@ private:
   bool m_bInvalidPolarsFile;
   bool m_bInvalidGribFile;
   bool m_bShipDriverHasStarted;
-
-  wxString createDBTSentence(double myDepth);
 
   Plugin_WaypointExList* myList;
 };
