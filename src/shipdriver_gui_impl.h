@@ -59,6 +59,7 @@
 
 #define ID_SOMETHING 2001
 #define ID_SOMETHING_ELSE 2002
+#define KNOT_2_KPH 1.852
 
 #ifdef __WXOSX__
 #define SHIPDRIVER_DLG_STYLE \
