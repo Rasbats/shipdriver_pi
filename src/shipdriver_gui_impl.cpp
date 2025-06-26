@@ -1317,22 +1317,13 @@ wxString Dlg::createHDTSentence(double myDir) {
   |   | |
   $--HDT, x.x, T*hh<CR><LF>
   */
-  wxString nSpd;
   wxString nDir;
-  wxString nTime;
-  wxString nDate;
-  wxString nValid;
   wxString nForCheckSum;
   wxString nFinal;
   wxString nC = ",";
-  wxString nA = "A";
-  wxString nT = "T,";
-  wxString nM = "M,";
-  wxString nN = "N,";
-  wxString nK = "K,";
+  wxString nT = "T";
 
   wxString nHDG = "IIHDT,";
-  nValid = "A,A";
   wxString ndlr = "$";
   wxString nast = "*";
 
@@ -1341,7 +1332,7 @@ wxString Dlg::createHDTSentence(double myDir) {
   nForCheckSum = nHDG + nDir + nC + nT;
 
   nFinal = ndlr + nForCheckSum + nast + makeCheckSum(nForCheckSum);
-  // wxMessageBox(nFinal);
+
   return nFinal;
 }
 
