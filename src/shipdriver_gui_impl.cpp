@@ -1279,7 +1279,8 @@ wxString Dlg::createGLLSentence(wxDateTime myDateTime, double myLat,
 wxString Dlg::createVTGSentence(double mySpd, double myDir) {
   //$GPVTG, 054.7, T, 034.4, M, 005.5, N, 010.2, K * 48
   //$IIVTG, 307., T, , M, 08.5, N, 15.8, K, A * 2F
-  wxString nSpd;
+  wxString nSpdN;
+  wxString nSpdK;
   wxString nDir;
   wxString nTime;
   wxString nDate;
@@ -1298,11 +1299,12 @@ wxString Dlg::createVTGSentence(double mySpd, double myDir) {
   wxString ndlr = "$";
   wxString nast = "*";
 
-  nSpd = wxString::Format("%f", mySpd);
+  nSpdN = wxString::Format("%f", mySpd);
+  nSpdK = wxString::Format("%f", mySpd*KNOT_2_KPH);
   nDir = wxString::Format("%f", myDir);
 
   nForCheckSum =
-      nVTG + nDir + nC + nT + nC + nM + nSpd + nC + nN + nC + nC + nA;
+      nVTG + nDir + nC + nT + nC + nM + nSpdN + nC + nN + nSpdK + nC + nK + nA;
 
   nFinal = ndlr + nForCheckSum + nast + makeCheckSum(nForCheckSum);
   // wxMessageBox(nFinal);
