@@ -32,7 +32,7 @@ set(OCPN_RELEASE_REPO
 # -------  Plugin setup --------
 #
 set(PKG_NAME ShipDriver_pi)
-set(PKG_VERSION  3.3.8)
+set(PKG_VERSION  3.4.2)
 set(PKG_PRERELEASE "")  # Empty, or a tag like 'beta'
 
 set(DISPLAY_NAME ShipDriver)    # Dialogs, installer artifacts, ...
