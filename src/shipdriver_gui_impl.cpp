@@ -1235,7 +1235,7 @@ wxString Dlg::createRMCSentence(wxDateTime myDateTime, double myLat,
   nDate = DateTimeToDateString(myDateTime);
 
   nForCheckSum =
-      nRMC + nTime + nC + nA + nNS + nEW + nSpd + nC + nDir + nC + nDate + ",,";
+      nRMC + nTime + nC + nA + nNS + nEW + nSpd + nC + nDir + nC + nDate + ",,,A";
   nFinal = ndlr + nForCheckSum + nast + makeCheckSum(nForCheckSum);
   return nFinal;
 }
