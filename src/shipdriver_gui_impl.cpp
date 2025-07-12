@@ -851,9 +851,8 @@ void Dlg::Notify() {
 
   if (m_bUseFile) nmeafile->AddLine(myNMEAais);
 
-  int ss = 1;
-  wxTimeSpan mySeconds = wxTimeSpan::Seconds(ss);
-  wxDateTime mdt = dt.Add(mySeconds);
+  wxTimeSpan myTimeInterval = wxTimeSpan::Milliseconds(m_interval);
+  wxDateTime mdt = dt.Add(myTimeInterval);
 
   bool m_bGrib = false;
   double wspd, wdir;
