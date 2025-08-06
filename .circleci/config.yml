@@ -43,66 +43,6 @@ jobs:
       - CMAKE_BUILD_PARALLEL_LEVEL: 2
     <<: *debian-steps
 
-  build-bullseye-armhf:
-    machine:
-      image: ubuntu-2204:current
-    resource_class: arm.medium
-    environment:
-      - TARGET_TUPLE: debian-armhf;11;armhf
-      - OCPN_TARGET: bullseye
-      - CMAKE_BUILD_PARALLEL_LEVEL: 2
-    steps:
-      - checkout
-      - run: ci/circleci-build-debian-armhf.sh
-      - run: cd build-debian; /bin/bash < upload.sh
-      - run: ci/git-push.sh build-debian
-
-  build-bullseye-wx32-armhf:
-    machine:
-      image: ubuntu-2204:current
-    resource_class: arm.medium
-    environment:
-      - TARGET_TUPLE: debian-wx32-armhf;11;armhf
-      - OCPN_TARGET: bullseye
-      - BUILD_WX32: true
-      - CMAKE_BUILD_PARALLEL_LEVEL: 2
-    steps:
-      - checkout
-      - run: ci/circleci-build-debian-armhf.sh
-      - run: cd build-debian; /bin/bash < upload.sh
-      - run: ci/git-push.sh build-debian
-
-
-  build-bullseye-arm64:
-    machine:
-      image: ubuntu-2204:current
-    resource_class: arm.medium
-    environment:
-      - OCPN_TARGET: bullseye
-      - TARGET_TUPLE: debian-arm64;11;arm64
-      - CMAKE_BUILD_PARALLEL_LEVEL: 2
-    steps:
-      - checkout
-      - run: ci/circleci-build-debian-docker.sh
-      - run: cd build-debian; /bin/bash < upload.sh
-      - run: ci/git-push.sh build-debian
-
-  build-bullseye-wx32-arm64:
-    machine:
-      image: ubuntu-2204:current
-    resource_class: arm.medium
-    environment:
-      - OCPN_TARGET: bullseye
-      - BUILD_WX32: true
-      - TARGET_TUPLE: debian-wx32-arm64;11;arm64
-      - CMAKE_BUILD_PARALLEL_LEVEL: 2
-    steps:
-      - checkout
-      - run: ci/circleci-build-debian-docker.sh
-      - run: cd build-debian; /bin/bash < upload.sh
-      - run: ci/git-push.sh build-debian
-
-
   build-bookworm:
     machine:
       image: ubuntu-2204:current
@@ -174,7 +114,6 @@ jobs:
         # Update the last part, here v2, to invalidate cache
         default: "fp-arm20-v2"
     <<: *flatpak-steps
-
 
   build-flatpak-x86:
     machine:
@@ -290,19 +229,7 @@ workflows:
       - build-bullseye-wx32:
           <<: *std-filters
 
-      - build-bullseye-wx32-arm64:
-          <<: *std-filters
-
-      - build-bullseye-wx32-armhf:
-          <<: *std-filters
-
       - build-bullseye:
-          <<: *std-filters
-
-      - build-bullseye-armhf:
-          <<: *std-filters
-
-      - build-bullseye-arm64:
           <<: *std-filters
 
       - build-bookworm-arm64:
