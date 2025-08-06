@@ -1,3 +1,8 @@
+3.4.0-beta2 Aug 06, 2025
+
+* Remove bullseye-armhf, wx32-armhf, wx32-arm64 , wx32-armhf
+* flatpak - build with 24.08 (#612)
+
 3.4.0-beta1 Apr 17, 2025
 
 * Revert to API118
