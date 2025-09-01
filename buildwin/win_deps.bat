@@ -7,12 +7,18 @@
 ::
 
 :: Install the pathman tool: https://github.com/therootcompany/pathman
-:: Fix PATH so it can be used in this script
+:: Fix PATH so it can be used in this script.
+:: The regular installation using webi is broken since long, the root
+:: cause (pun intended) is broken https setup at https://rootprojects.org.
 ::
+set localbin="%HomeDrive%%HomePath%\.local\bin"
+set pathman_path="buildwin\pathman.exe"
+if not "%APPVEYOR_BUILD_FOLDER%" == "" (
+    set pathman_path="%APPVEYOR_BUILD_FOLDER%\%pathman_path%"
+)
 if not exist "%HomeDrive%%HomePath%\.local\bin\pathman.exe" (
-    pushd "%HomeDrive%%HomePath%"
-    curl.exe https://webi.ms/pathman | powershell
-    popd
+    if not exist %localbin% mkdir %localbin%
+    copy %pathman_path%  %localbin%
 )
 pathman list > nul 2>&1
 if errorlevel 1 set PATH=%PATH%;%HomeDrive%\%HomePath%\.local\bin
