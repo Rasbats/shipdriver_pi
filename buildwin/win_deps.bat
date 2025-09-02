@@ -70,4 +70,10 @@ if not exist "%WXWIN%" (
 pathman add "%WXWIN%" > nul
 pathman add "%wxWidgets_LIB_DIR%" > nul
 
+if not exist %SCRIPTDIR%\..\cache ( mkdir %SCRIPTDIR%\..\cache )
+set "CONFIG_FILE=%SCRIPTDIR%\..\cache\wx-config.bat"
+echo set "wxWidgets_ROOT_DIR=%wxWidgets_ROOT_DIR%" > %CONFIG_FILE%
+echo set "wxWidgets_LIB_DIR=%wxWidgets_LIB_DIR%" >> %CONFIG_FILE%
+
+
 refreshenv
