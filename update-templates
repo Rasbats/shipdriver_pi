@@ -248,6 +248,16 @@ if [ -e update-ignored ]; then
     done
 fi
 
+if [ git grep -q libunarr-dev build-deps/control ]; then
+    $SED_I -e '/libunarr/s/^.*$/libarchive-dev (>= 3.7.4) | libunarr-dev,/' \
+      build-deps/control
+fi
+git diff --quiet build-deps/control || {
+    echo "Updating libunarr-dev dependency in  build-deps/control"
+    git add build-deps/control
+    git commit -m "build-deps/control: Updating libunarr-dev dependency"
+}
+
 for f in buildosx buildwin/NSIS* libs/AndroidLibs.cmake mingw .drone.yml; do
     if test -e $f; then git rm -rf $f; fi
 done
