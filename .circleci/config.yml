@@ -279,24 +279,6 @@ workflows:
       - build-android-armhf:
           <<: *std-filters
 
-      - build-bullseye-wx32:
-          <<: *std-filters
-
-      - build-bullseye-wx32-arm64:
-          <<: *std-filters
-
-      - build-bullseye-wx32-armhf:
-          <<: *std-filters
-
-      - build-bullseye:
-          <<: *std-filters
-
-      - build-bullseye-armhf:
-          <<: *std-filters
-
-      - build-bullseye-arm64:
-          <<: *std-filters
-
       - build-bookworm-arm64:
           <<: *std-filters
 
