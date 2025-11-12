@@ -191,6 +191,7 @@ jobs:
     environment:
       - OCPN_TARGET: macos
       - CMAKE_BUILD_PARALLEL_LEVEL: 2
+      - OSX_ARCHITECTURES: arm64;x86_64
     steps:
       - checkout
       - run: sudo chmod go+w /usr/local
@@ -217,6 +218,7 @@ jobs:
       environment:
         - OCPN_TARGET: macos
         - CMAKE_BUILD_PARALLEL_LEVEL: 2
+        - OSX_ARCHITECTURES: x86_64
       steps:
         - checkout
         - run: sudo chmod go+w /usr/local
