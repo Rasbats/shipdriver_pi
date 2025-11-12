@@ -19,6 +19,8 @@
 
 /** \file plug_utils.cpp Implement plug_utils.h. */
 
+#include <cstdint>
+
 #include "wx/log.h"
 #include "ocpn_plugin.h"
 #include "plug_utils.h"
