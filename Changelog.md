@@ -1,4 +1,4 @@
-3.4.1 TBD
+3.4.1 Nov 13, 2025
 * CI: update macos to build intel legacy and universal.
 * build-deps/control: Handle outdated libunarr-dev dependency
 * opencpn-libs: Update, fixes annoying cmake warnings - #605
