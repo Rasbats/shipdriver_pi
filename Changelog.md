@@ -1,3 +1,11 @@
+3.4.2 Nov 13, 2025
+* .circleci/config: Formatting bugfix
+
+3.4.1 Nov 13, 2025
+* CI: update macos to build intel legacy and universal.
+* build-deps/control: Handle outdated libunarr-dev dependency
+* opencpn-libs: Update, fixes annoying cmake warnings - #605
+
 3.4.0 Sep13, 2025
 
 * Updating opencpn-libs to latest version.#0559aae
