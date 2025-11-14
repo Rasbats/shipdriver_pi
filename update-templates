@@ -2,7 +2,7 @@
 #
 # Update a plugin with new shipdriver templates.
 #
-# usage: ./update-templates [-t] [treeish]
+# usage: See usage() below.
 #
 # Merge changes from upstream shipdriver repo into
 # current branch.
@@ -15,14 +15,13 @@ Usage:
     update-templates [-T]  <treeish>
     update-templates [-h |-l]
 
-
 Parameters:
     treeish:
          A shipdriver tag or branch.
     Recommended usage is using the latest stable (non-beta) tag
 
 Options:
-    -l   List available shipdriver tags
+    -l   List available shipdriver tags (slow)
     -h   Print this message and exit
     -T   Test mode, do not auto-update
 
@@ -199,6 +198,7 @@ git diff-index --quiet --cached HEAD -- || {
 
 # Check for files/dirs which are private, but should be copied on first run.
 for f in  \
+    .pre-commit-config.yaml \
     config.h.in \
     build-deps \
     build-conf.rc \
