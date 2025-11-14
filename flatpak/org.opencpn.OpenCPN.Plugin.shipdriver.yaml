@@ -1,3 +1,4 @@
+---
 #
 # Branches and runtime-version:
 #   - master     Nigthly builds, 22.08 runtime
@@ -67,7 +68,7 @@ modules:
 #  # directory. Doing so, it handles three tokens:
 # @@ -19,7 +19,7 @@
 #  id: org.opencpn.OpenCPN.Plugin.@plugin_name
-#  
+#
 #  runtime: org.opencpn.OpenCPN
 # -runtime-version: beta   # FIXME(alec) Revert to stable when updated to 22.08
 # +runtime-version: stable
