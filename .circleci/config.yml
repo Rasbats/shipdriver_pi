@@ -52,20 +52,6 @@ jobs:
       - run: cd build-debian; /bin/bash < upload.sh
       - run: ci/git-push.sh build-debian
 
-  build-bookworm-armhf:
-    machine:
-      image: ubuntu-2204:current
-    resource_class: arm.medium
-    environment:
-      - TARGET_TUPLE: debian-armhf;12;armhf
-      - OCPN_TARGET: bookworm
-      - CMAKE_BUILD_PARALLEL_LEVEL: 2
-    steps:
-      - checkout
-      - run: ci/circleci-build-debian-armhf.sh
-      - run: cd build-debian; /bin/bash < upload.sh
-      - run: ci/git-push.sh build-debian
-
   build-trixie:
     machine:
       image: ubuntu-2204:current
@@ -91,20 +77,6 @@ jobs:
     steps:
       - checkout
       - run: ci/circleci-build-debian-docker.sh
-      - run: cd build-debian; /bin/bash < upload.sh
-      - run: ci/git-push.sh build-debian
-
-  build-trixie-armhf:
-    machine:
-      image: ubuntu-2204:current
-    resource_class: arm.medium
-    environment:
-      - TARGET_TUPLE: debian-armhf;13;armhf
-      - OCPN_TARGET: bookworm
-      - CMAKE_BUILD_PARALLEL_LEVEL: 2
-    steps:
-      - checkout
-      - run: ci/circleci-build-debian-armhf.sh
       - run: cd build-debian; /bin/bash < upload.sh
       - run: ci/git-push.sh build-debian
 
@@ -282,9 +254,6 @@ workflows:
       - build-bookworm-arm64:
           <<: *std-filters
 
-      - build-bookworm-armhf:
-          <<: *std-filters
-
       - build-bookworm:
           <<: *std-filters
 
@@ -292,7 +261,4 @@ workflows:
           <<: *std-filters
 
       - build-trixie-arm64:
-          <<: *std-filters
-
-      - build-trixie-armhf:
           <<: *std-filters
