@@ -63,7 +63,7 @@ function update_dir() {
     git checkout $treeish $d
     git add $d
     git diff-index --quiet --cached HEAD -- || {
-        git commit -m "Templates: Updating $d"
+        git commit --no-verify -m "Templates: Updating $d"
     }
 }
 
@@ -170,7 +170,7 @@ do
     git checkout $source_treeish $f
     git add $f || git add --renormalize $f
 done
-git commit -m "Templates: Updating other files"
+git commit --no-verify -m "Templates: Updating other files"
 
 # Handle opencpn-libs submodule
 test -d opencpn-libs || \
@@ -179,7 +179,7 @@ git submodule update --remote --merge opencpn-libs
 git add opencpn-libs
 git diff-index --quiet --cached HEAD -- || {
     echo "Updating opencpn-libs submodule"
-    git commit -m "opencpn-libs: Update to latest version."
+    git commit --no-verify -m "opencpn-libs: Update to latest version."
 }
 sed -i 's|leamas/opencpn-libs|opencpn/opencpn-libs|g' \
     .git/modules/opencpn-libs/config || :
@@ -193,7 +193,7 @@ $SED_I \
 git add flatpak
 git diff-index --quiet --cached HEAD -- || {
     echo "Updating Updating flatpak runtime version to 22.08"
-    git commit -m "opencpn-libs: Update to latest version."
+    git commit --no-verify -m "opencpn-libs: Update to latest version."
 }
 
 # Check for files/dirs which are private, but should be copied on first run.
@@ -212,7 +212,7 @@ do
 done
 git diff-index --quiet --cached HEAD -- || {
     echo "Adding initial versions of private data"
-    git commit -m "Adding initial versions of private data"
+    git commit --no-verify -m "Adding initial versions of private data"
 }
 
 # Update wxwidgets deps in build-deps/control to handle wxwidgets 3.2
@@ -238,7 +238,8 @@ rm -f $wxtemp
 git diff --quiet build-deps/control || {
     echo "Updating wxwidgets dependencies in build-deps/control"
     git add build-deps/control
-    git commit -m "build-deps/control: Updating wxwidgets dependencies"
+    git commit --no-verify \
+        -m "build-deps/control: Updating wxwidgets dependencies"
 }
 
 if [ -e update-ignored ]; then
@@ -255,7 +256,8 @@ fi
 git diff --quiet build-deps/control || {
     echo "Updating libunarr-dev dependency in  build-deps/control"
     git add build-deps/control
-    git commit -m "build-deps/control: Updating libunarr-dev dependency"
+    git commit --no-verify \
+        -m "build-deps/control: Updating libunarr-dev dependency"
 }
 
 for f in buildosx buildwin/NSIS* libs/AndroidLibs.cmake mingw .drone.yml; do
@@ -263,7 +265,7 @@ for f in buildosx buildwin/NSIS* libs/AndroidLibs.cmake mingw .drone.yml; do
 done
 git diff-index --quiet --cached HEAD -- || {
     echo "Removing unused files"
-    git commit -am "Templates: Removing obsoleted and unused files."
+    git commit --no-verify -am "Templates: Removing obsoleted and unused files."
 }
 
 if [ -f cmake/TemplateVersion ]; then
@@ -286,7 +288,7 @@ echo "commit: $commit" >> cmake/TemplateVersion
 tags=$(git tag --contains $commit)
 echo "tags: $tags" >> cmake/TemplateVersion
 git add cmake/TemplateVersion
-git commit -m "cmake: Update TemplateVersion to $commit"
+git commit --no-verify -m "cmake: Update TemplateVersion to $commit"
 
 cat << EOF
 
