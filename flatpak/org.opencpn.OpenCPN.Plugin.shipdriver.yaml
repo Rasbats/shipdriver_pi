@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 ---
+=======
+>>>>>>> parent of 770443ce (cmake: Update TemplateVersion to bb18f67)
 #
 # Branches and runtime-version:
 #   - master     Nigthly builds, 22.08 runtime
@@ -21,7 +24,11 @@ id: org.opencpn.OpenCPN.Plugin.@plugin_name
 
 runtime: org.opencpn.OpenCPN
 runtime-version: stable
+<<<<<<< HEAD
 sdk: org.freedesktop.Sdk//24.08
+=======
+sdk: org.freedesktop.Sdk//22.08
+>>>>>>> parent of 770443ce (cmake: Update TemplateVersion to bb18f67)
 build-extension: true
 separate-locales: false
 appstream-compose: false
@@ -68,7 +75,11 @@ modules:
 #  # directory. Doing so, it handles three tokens:
 # @@ -19,7 +19,7 @@
 #  id: org.opencpn.OpenCPN.Plugin.@plugin_name
+<<<<<<< HEAD
 #
+=======
+#  
+>>>>>>> parent of 770443ce (cmake: Update TemplateVersion to bb18f67)
 #  runtime: org.opencpn.OpenCPN
 # -runtime-version: beta   # FIXME(alec) Revert to stable when updated to 22.08
 # +runtime-version: stable
