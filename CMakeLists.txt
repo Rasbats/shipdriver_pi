@@ -29,6 +29,12 @@ endif ()
 #
 include(Plugin.cmake)
 
+#------ Local setup e. g. IDE specific stuff --------
+#
+if (EXISTS ${CMAKE_CURRENT_LIST_DIR}/local_config.cmake)
+  include(${CMAKE_CURRENT_LIST_DIR}/local_config.cmake)
+endif ()
+
 # -------- Setup completed, build the plugin --------
 #
 project(${PKG_NAME} VERSION ${PKG_VERSION})
