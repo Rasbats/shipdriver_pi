@@ -204,6 +204,7 @@ for f in  \
     build-conf.rc \
     libs \
     build-deps/macos-cache-stamp \
+    build-deps/control \
     build-deps/0001-matrix.h-Patch-attributes-handling-wxwidgets-22790.patch \
     UPDATE_PLUGIN_API.md
 do
