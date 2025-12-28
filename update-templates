@@ -283,7 +283,7 @@ echo "# Created by update-templates" > cmake/TemplateVersion
 echo "date: $(date -u +'%Y-%m-%d %H:%M UTC')" >> cmake/TemplateVersion
 commit=$(git rev-parse --short $source_treeish)
 echo "commit: $commit" >> cmake/TemplateVersion
-tags=$(git tag --contains $commit)
+tags=$(git tag --points-at $commit | tr '\n' ' ')
 echo "tags: $tags" >> cmake/TemplateVersion
 git add cmake/TemplateVersion
 git commit -m "cmake: Update TemplateVersion to $commit"
