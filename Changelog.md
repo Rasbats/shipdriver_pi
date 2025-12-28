@@ -1,3 +1,6 @@
+3.4.3 Dec 28, 2025
+* update-templates: syntax bugfix
+
 3.4.2 Nov 13, 2025
 * .circleci/config: Formatting bugfix
 
