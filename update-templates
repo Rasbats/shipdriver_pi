@@ -248,7 +248,7 @@ if [ -e update-ignored ]; then
     done
 fi
 
-if [ git grep -q libunarr-dev build-deps/control ]; then
+if git grep -q libunarr-dev build-deps/control; then
     $SED_I -e '/libunarr/s/^.*$/libarchive-dev (>= 3.7.4) | libunarr-dev,/' \
       build-deps/control
 fi
