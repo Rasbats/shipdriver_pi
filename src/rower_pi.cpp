@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Project:  OpenCPN
- * Purpose:  ShipDriver Plugin
+ * Purpose: rower Plugin
  * Author:   Mike Rossiter
  *
  ***************************************************************************
@@ -33,9 +33,9 @@
 
 #include "config.h"
 #include "icons.h"
-#include "shipdriver_pi.h"
-#include "shipdriver_gui.h"
-#include "shipdriver_gui_impl.h"
+#include "rower_pi.h"
+#include "rower_gui.h"
+#include "rower_gui_impl.h"
 #include "ocpn_plugin.h"
 #include "plug_utils.h"
 
@@ -46,14 +46,14 @@ using namespace std;
 // the class factories, used to create and destroy instances of the PlugIn
 
 extern "C" DECL_EXP opencpn_plugin* create_pi(void* ppimgr) {
-  return new ShipDriverPi(ppimgr);
+  return new rowerPi(ppimgr);
 }
 
 extern "C" DECL_EXP void destroy_pi(opencpn_plugin* p) { delete p; }
 
 //---------------------------------------------------------------------------------------------------------
 //
-//    ShipDriver PlugIn Implementation
+//   rower PlugIn Implementation
 //
 //---------------------------------------------------------------------------------------------------------
 
@@ -63,13 +63,10 @@ extern "C" DECL_EXP void destroy_pi(opencpn_plugin* p) { delete p; }
 //
 //---------------------------------------------------------------------------------------------------------
 
-ShipDriverPi::ShipDriverPi(void* ppimgr)
+rowerPi::rowerPi(void* ppimgr)
     : opencpn_plugin_118(ppimgr),
       m_hr_dialog_x(0),
       m_hr_dialog_y(8),
-      m_is_grib_valid(false),
-      m_grib_lat(0),
-      m_grib_lon(0),
       m_tr_spd(0),
       m_tr_dir(0),
       m_cursor_lat(0),
@@ -87,7 +84,7 @@ ShipDriverPi::ShipDriverPi(void* ppimgr)
       m_display_width(0),
       m_display_height(0),
       m_leftclick_tool_id(-1),
-      m_show_shipdriver_icon(false),
+      m_show_rower_icon(false),
       m_copy_use_ais(false),
       m_copy_use_file(false), 
       m_copy_use_nmea(false) 
@@ -95,38 +92,38 @@ ShipDriverPi::ShipDriverPi(void* ppimgr)
 {
   // Create the PlugIn icons
   initialize_images();
-  auto icon_path = GetPluginIcon("shipdriver_panel_icon", PKG_NAME);
+  auto icon_path = GetPluginIcon("rower_panel_icon", PKG_NAME);
   if (icon_path.type == IconPath::Type::Svg)
     m_panel_bitmap = LoadSvgIcon(icon_path.path.c_str());
   else if (icon_path.type == IconPath::Type::Png)
     m_panel_bitmap = LoadPngIcon(icon_path.path.c_str());
   else  // icon_path.type == NotFound
-    wxLogWarning("Cannot find icon for basename: %s", "shipdriver_panel_icon");
+    wxLogWarning("Cannot find icon for basename: %s", "rower_panel_icon");
   if (m_panel_bitmap.IsOk())
-    wxLogDebug("ShipDriverPi::, bitmap OK");
+    wxLogDebug("rowerPi::, bitmap OK");
   else
-    wxLogDebug("ShipDriverPi::, bitmap fail");
-  m_show_shipdriver = false;
+    wxLogDebug("rowerPi::, bitmap fail");
+  m_show_rower = false;
 }
 
-ShipDriverPi::~ShipDriverPi() {
-  delete _img_ShipDriverIcon;
+rowerPi::~rowerPi() {
+  delete _img_rowerIcon;
 
   if (m_dialog) {
     wxFileConfig* pConf = GetOCPNConfigObject();
 
     if (pConf) {
-      pConf->SetPath("/PlugIns/ShipDriver_pi");
-      pConf->Write("shipdriverUseAis", m_copy_use_ais);
-      pConf->Write("shipdriverUseFile", m_copy_use_file);
-      pConf->Write("shipdriverMMSI", m_copy_mmsi);
-      pConf->Write("shipdriverUseNMEA", m_copy_use_nmea);
+      pConf->SetPath("/PlugIns/rower_pi");
+      pConf->Write("rowerUseAis", m_copy_use_ais);
+      pConf->Write("rowerUseFile", m_copy_use_file);
+      pConf->Write("rowerMMSI", m_copy_mmsi);
+      pConf->Write("rowerUseNMEA", m_copy_use_nmea);
     }
   }
 }
 
-int ShipDriverPi::Init() {
-  AddLocaleCatalog("opencpn-ShipDriver_pi");
+int rowerPi::Init() {
+  AddLocaleCatalog("opencpn-rower_pi");
 
   // Set some default private member parameters
   m_hr_dialog_x = 40;
@@ -144,19 +141,19 @@ int ShipDriverPi::Init() {
 
   //    And load the configuration items
   LoadConfig();
-  auto icon = GetPluginIcon("shipdriver_pi", PKG_NAME);
-  auto toggled_icon = GetPluginIcon("shipdriver_pi_toggled", PKG_NAME);
+  auto icon = GetPluginIcon("rower_pi", PKG_NAME);
+  auto toggled_icon = GetPluginIcon("rower_pi_toggled", PKG_NAME);
   //    This PlugIn needs a toolbar icon, so request its insertion
-  if (m_show_shipdriver_icon) {
+  if (m_show_rower_icon) {
     if (icon.type == IconPath::Type::Svg)
       m_leftclick_tool_id = InsertPlugInToolSVG(
-          "ShipDriver", icon.path, icon.path, toggled_icon.path, wxITEM_CHECK,
-          "ShipDriver", "", nullptr, ShipDriver_TOOL_POSITION, 0, this);
+          "rower", icon.path, icon.path, toggled_icon.path, wxITEM_CHECK,
+          "rower", "", nullptr,rower_TOOL_POSITION, 0, this);
     else if (icon.type == IconPath::Type::Png) {
       auto bitmap = LoadPngIcon(icon.path.c_str());
       m_leftclick_tool_id =
-          InsertPlugInTool("", &bitmap, &bitmap, wxITEM_CHECK, "ShipDriver", "",
-                           nullptr, ShipDriver_TOOL_POSITION, 0, this);
+          InsertPlugInTool("", &bitmap, &bitmap, wxITEM_CHECK, "rower", "",
+                           nullptr,rower_TOOL_POSITION, 0, this);
     }
   }
   m_dialog = nullptr;
@@ -167,16 +164,16 @@ int ShipDriverPi::Init() {
           WANTS_PLUGIN_MESSAGING | WANTS_CONFIG);
 }
 
-bool ShipDriverPi::DeInit() {
+bool rowerPi::DeInit() {
   //    Record the dialog position
   if (m_dialog) {
     // Capture dialog position
     wxPoint p = m_dialog->GetPosition();
     wxRect r = m_dialog->GetRect();
-    SetShipDriverDialogX(p.x);
-    SetShipDriverDialogY(p.y);
-    SetShipDriverDialogSizeX(r.GetWidth());
-    SetShipDriverDialogSizeY(r.GetHeight());
+    SetrowerDialogX(p.x);
+    SetrowerDialogY(p.y);
+    SetrowerDialogSizeX(r.GetWidth());
+    SetrowerDialogSizeY(r.GetHeight());
     if (m_copy_use_nmea) {
       if (m_dialog->nmeastream->IsOpened()) {
         m_dialog->nmeastream->Write();
@@ -193,8 +190,8 @@ bool ShipDriverPi::DeInit() {
     delete m_dialog;
     m_dialog = nullptr;
 
-    m_show_shipdriver = false;
-    SetToolbarItemState(m_leftclick_tool_id, m_show_shipdriver);
+    m_show_rower = false;
+    SetToolbarItemState(m_leftclick_tool_id, m_show_rower);
   }
 
   SaveConfig();
@@ -204,43 +201,43 @@ bool ShipDriverPi::DeInit() {
   return true;
 }
 
-int ShipDriverPi::GetAPIVersionMajor() { return atoi(API_VERSION); }
+int rowerPi::GetAPIVersionMajor() { return atoi(API_VERSION); }
 
-int ShipDriverPi::GetAPIVersionMinor() {
+int rowerPi::GetAPIVersionMinor() {
   std::string v(API_VERSION);
   size_t dotpos = v.find('.');
   return atoi(v.substr(dotpos + 1).c_str());
 }
 
-int ShipDriverPi::GetPlugInVersionMajor() { return PLUGIN_VERSION_MAJOR; }
+int rowerPi::GetPlugInVersionMajor() { return PLUGIN_VERSION_MAJOR; }
 
-int ShipDriverPi::GetPlugInVersionMinor() { return PLUGIN_VERSION_MINOR; }
+int rowerPi::GetPlugInVersionMinor() { return PLUGIN_VERSION_MINOR; }
 
-int ShipDriverPi::GetPlugInVersionPatch() { return PLUGIN_VERSION_PATCH; }
+int rowerPi::GetPlugInVersionPatch() { return PLUGIN_VERSION_PATCH; }
 
-int ShipDriverPi::GetPlugInVersionPost() { return PLUGIN_VERSION_TWEAK; };
+int rowerPi::GetPlugInVersionPost() { return PLUGIN_VERSION_TWEAK; };
 
-const char* ShipDriverPi::GetPlugInVersionPre() { return PKG_PRERELEASE; }
+const char*rowerPi::GetPlugInVersionPre() { return PKG_PRERELEASE; }
 
-const char* ShipDriverPi::GetPlugInVersionBuild() { return PKG_BUILD_INFO; }
+const char*rowerPi::GetPlugInVersionBuild() { return PKG_BUILD_INFO; }
 
-wxBitmap* ShipDriverPi::GetPlugInBitmap() { return &m_panel_bitmap; }
+wxBitmap*rowerPi::GetPlugInBitmap() { return &m_panel_bitmap; }
 
-wxString ShipDriverPi::GetCommonName() { return PLUGIN_API_NAME; }
+wxString rowerPi::GetCommonName() { return PLUGIN_API_NAME; }
 
-wxString ShipDriverPi::GetShortDescription() { return PKG_SUMMARY; }
+wxString rowerPi::GetShortDescription() { return PKG_SUMMARY; }
 
-wxString ShipDriverPi::GetLongDescription() { return PKG_DESCRIPTION; }
+wxString rowerPi::GetLongDescription() { return PKG_DESCRIPTION; }
 
-int ShipDriverPi::GetToolbarToolCount() { return 1; }
+int rowerPi::GetToolbarToolCount() { return 1; }
 
-void ShipDriverPi::SetColorScheme(PI_ColorScheme cs) {
+void rowerPi::SetColorScheme(PI_ColorScheme cs) {
   if (!m_dialog) return;
   DimeWindow(m_dialog);
 }
 
-void ShipDriverPi::ShowPreferencesDialog(wxWindow* parent) {
-  auto* pref = new shipdriverPreferences(parent);
+void rowerPi::ShowPreferencesDialog(wxWindow* parent) {
+  auto* pref = new rowerPreferences(parent);
 
   pref->m_cbTransmitAis->SetValue(m_copy_use_ais);
   pref->m_cbAisToFile->SetValue(m_copy_use_file);
@@ -281,7 +278,7 @@ void ShipDriverPi::ShowPreferencesDialog(wxWindow* parent) {
   pref = nullptr;
 }
 
-void ShipDriverPi::OnToolbarToolCallback(int id) {
+void rowerPi::OnToolbarToolCallback(int id) {
   if (!m_dialog) {
     m_dialog = new Dlg(m_parent_window);
     m_dialog->plugin = this;
@@ -298,10 +295,10 @@ void ShipDriverPi::OnToolbarToolCallback(int id) {
 
   // m_pDialog->Fit();
   // Toggle
-  m_show_shipdriver = !m_show_shipdriver;
+  m_show_rower = !m_show_rower;
 
   //    Toggle dialog?
-  if (m_show_shipdriver) {
+  if (m_show_rower) {
     m_dialog->Move(wxPoint(m_hr_dialog_x, m_hr_dialog_y));
     m_dialog->SetSize(m_hr_dialog_sx, m_hr_dialog_sy);
     m_dialog->Show();
@@ -312,32 +309,32 @@ void ShipDriverPi::OnToolbarToolCallback(int id) {
 
   // Toggle is handled by the toolbar but we must keep plugin manager b_toggle
   // updated to actual status to ensure correct status upon toolbar rebuild
-  SetToolbarItemState(m_leftclick_tool_id, m_show_shipdriver);
+  SetToolbarItemState(m_leftclick_tool_id, m_show_rower);
 
   // Capture dialog position
   wxPoint p = m_dialog->GetPosition();
   wxRect r = m_dialog->GetRect();
-  SetShipDriverDialogX(p.x);
-  SetShipDriverDialogY(p.y);
-  SetShipDriverDialogSizeX(r.GetWidth());
-  SetShipDriverDialogSizeY(r.GetHeight());
+  SetrowerDialogX(p.x);
+  SetrowerDialogY(p.y);
+  SetrowerDialogSizeX(r.GetWidth());
+  SetrowerDialogSizeY(r.GetHeight());
 
   RequestRefresh(m_parent_window);  // refresh main window
 }
 
-bool ShipDriverPi::LoadConfig() {
+bool rowerPi::LoadConfig() {
   auto* conf = (wxFileConfig*)m_config;
 
   if (conf) {
-    if (conf->HasGroup(_T("/Settings/ShipDriver_pi"))) {
+    if (conf->HasGroup(_T("/Settings/rower_pi"))) {
       // Read the existing settings
 
-      conf->SetPath("/Settings/ShipDriver_pi");
-      conf->Read("ShowShipDriverIcon", &m_show_shipdriver_icon, true);
-      conf->Read("shipdriverUseAis", &m_copy_use_ais, false);
-      conf->Read("shipdriverUseNMEA", &m_copy_use_nmea, false);
-      conf->Read("shipdriverUseFile", &m_copy_use_file, false);
-      m_copy_mmsi = conf->Read("shipdriverMMSI", "123456789");
+      conf->SetPath("/Settings/rower_pi");
+      conf->Read("ShowrowerIcon", &m_show_rower_icon, true);
+      conf->Read("rowerUseAis", &m_copy_use_ais, false);
+      conf->Read("rowerUseNMEA", &m_copy_use_nmea, false);
+      conf->Read("rowerUseFile", &m_copy_use_file, false);
+      m_copy_mmsi = conf->Read("rowerMMSI", "123456789");
 
       m_hr_dialog_x = conf->Read("DialogPosX", 40L);
       m_hr_dialog_y = conf->Read("DialogPosY", 140L);
@@ -347,14 +344,14 @@ bool ShipDriverPi::LoadConfig() {
 #else
       m_hr_dialog_sy = conf->Read("DialogSizeY", 300L);
 #endif
-      conf->DeleteGroup(_T("/Settings/ShipDriver_pi"));
+      conf->DeleteGroup(_T("/Settings/rower_pi"));
     } else {
-      conf->SetPath("/PlugIns/ShipDriver_pi");
-      conf->Read("ShowShipDriverIcon", &m_show_shipdriver_icon, true);
-      conf->Read("shipdriverUseAis", &m_copy_use_ais, false);
-      conf->Read("shipdriverUseNMEA", &m_copy_use_nmea, false);
-      conf->Read("shipdriverUseFile", &m_copy_use_file, false);
-      m_copy_mmsi = conf->Read("shipdriverMMSI", "123456789");
+      conf->SetPath("/PlugIns/rower_pi");
+      conf->Read("ShowrowerIcon", &m_show_rower_icon, true);
+      conf->Read("rowerUseAis", &m_copy_use_ais, false);
+      conf->Read("rowerUseNMEA", &m_copy_use_nmea, false);
+      conf->Read("rowerUseFile", &m_copy_use_file, false);
+      m_copy_mmsi = conf->Read("rowerMMSI", "123456789");
 
       m_hr_dialog_x = conf->Read("DialogPosX", 40L);
       m_hr_dialog_y = conf->Read("DialogPosY", 140L);
@@ -375,7 +372,7 @@ bool ShipDriverPi::LoadConfig() {
     return false;
 }
 
-bool ShipDriverPi::SaveConfig() {
+bool rowerPi::SaveConfig() {
   auto* conf = (wxFileConfig*)m_config;
 
   if (conf) {
@@ -385,12 +382,12 @@ bool ShipDriverPi::SaveConfig() {
       return false;
     }
 
-    conf->SetPath("/PlugIns/ShipDriver_pi");
-    conf->Write("ShowShipDriverIcon", m_show_shipdriver_icon);
-    conf->Write("shipdriverUseAis", m_copy_use_ais);
-    conf->Write("shipdriverUseNMEA", m_copy_use_nmea);
-    conf->Write("shipdriverUseFile", m_copy_use_file);
-    conf->Write("shipdriverMMSI", m_copy_mmsi);
+    conf->SetPath("/PlugIns/rower_pi");
+    conf->Write("ShowrowerIcon", m_show_rower_icon);
+    conf->Write("rowerUseAis", m_copy_use_ais);
+    conf->Write("rowerUseNMEA", m_copy_use_nmea);
+    conf->Write("rowerUseFile", m_copy_use_file);
+    conf->Write("rowerMMSI", m_copy_mmsi);
 
     conf->Write("DialogPosX", m_hr_dialog_x);
     conf->Write("DialogPosY", m_hr_dialog_y);
@@ -402,16 +399,16 @@ bool ShipDriverPi::SaveConfig() {
     return false;
 }
 
-void ShipDriverPi::OnShipDriverDialogClose() {
-  m_show_shipdriver = false;
-  SetToolbarItemState(m_leftclick_tool_id, m_show_shipdriver);
+void rowerPi::OnrowerDialogClose() {
+  m_show_rower = false;
+  SetToolbarItemState(m_leftclick_tool_id, m_show_rower);
   m_dialog->Hide();
   SaveConfig();
 
   RequestRefresh(m_parent_window);  // refresh main window
 }
 
-void ShipDriverPi::OnContextMenuItemCallback(int id) {
+void rowerPi::OnContextMenuItemCallback(int id) {
   if (!m_dialog) return;
 
   if (id == m_position_menu_id) {
@@ -422,122 +419,13 @@ void ShipDriverPi::OnContextMenuItemCallback(int id) {
   }
 }
 
-void ShipDriverPi::SetCursorLatLon(double lat, double lon) {
+void rowerPi::SetCursorLatLon(double lat, double lon) {
   m_cursor_lat = lat;
   m_cursor_lon = lon;
 }
 
-void ShipDriverPi::SetPluginMessage(wxString& message_id,
-                                    wxString& message_body) {
-  if (message_id == "GRIB_TIMELINE") {
-    Json::CharReaderBuilder builder;
-    Json::CharReader* reader = builder.newCharReader();
-
-    Json::Value value;
-    string errors;
-
-    bool parsingSuccessful = reader->parse(
-        message_body.c_str(), message_body.c_str() + message_body.size(),
-        &value, &errors);
-    delete reader;
-
-    if (!parsingSuccessful) {
-      wxLogMessage("Grib_TimeLine error");
-      return;
-    }
-
-    // int day = value["Day"].asInt();
-
-    wxDateTime time;
-    time.Set(value["Day"].asInt(), (wxDateTime::Month)value["Month"].asInt(),
-             value["Year"].asInt(), value["Hour"].asInt(),
-             value["Minute"].asInt(), value["Second"].asInt());
-
-    if (m_dialog) {
-      m_dialog->m_GribTimelineTime = time.ToUTC();
-      // m_pDialog->m_textCtrl1->SetValue(dt);
-    }
-  }
-  if (message_id == "GRIB_TIMELINE_RECORD") {
-    Json::CharReaderBuilder builder;
-    Json::CharReader* reader = builder.newCharReader();
-
-    Json::Value value;
-    string errors;
-
-    bool parsingSuccessful = reader->parse(
-        message_body.c_str(), message_body.c_str() + message_body.size(),
-        &value, &errors);
-    delete reader;
-
-    if (!parsingSuccessful) {
-      wxLogMessage("Grib_TimeLine_Record error");
-      return;
-    }
-
-    static bool shown_warnings;
-    if (!shown_warnings) {
-      shown_warnings = true;
-
-      int grib_version_major = value["GribVersionMajor"].asInt();
-      int grib_version_minor = value["GribVersionMinor"].asInt();
-
-      int grib_version = 1000 * grib_version_major + grib_version_minor;
-      int grib_min = 1000 * GRIB_MIN_MAJOR + GRIB_MIN_MINOR;
-      int grib_max = 1000 * GRIB_MAX_MAJOR + GRIB_MAX_MINOR;
-
-      if (grib_version < grib_min || grib_version > grib_max) {
-        wxMessageDialog mdlg(
-            m_parent_window,
-            _("Grib plugin version not supported.") + "\n\n" +
-                wxString::Format(_("Use versions %d.%d to %d.%d"),
-                                 GRIB_MIN_MAJOR, GRIB_MIN_MINOR, GRIB_MAX_MAJOR,
-                                 GRIB_MAX_MINOR),
-            _("Weather Routing"), wxOK | wxICON_WARNING);
-        mdlg.ShowModal();
-      }
-    }
-
-    wxString sptr = value["TimelineSetPtr"].asString();
-
-    wxCharBuffer bptr = sptr.To8BitData();
-    const char* ptr = bptr.data();
-
-    GribRecordSet* gptr;
-    sscanf(ptr, "%p", &gptr);
-
-    double dir, spd;
-
-    m_is_grib_valid = GribCurrent(gptr, m_grib_lat, m_grib_lon, dir, spd);
-
-    m_tr_spd = spd;
-    m_tr_dir = dir;
-  }
-}
-
-[[maybe_unused]] bool ShipDriverPi::GribWind(GribRecordSet* grib, double lat,
-                                             double lon, double& wg,
-                                             double& vwg) {
-  if (!grib) return false;
-
-  if (!GribRecord::getInterpolatedValues(
-          vwg, wg, grib->m_GribRecordPtrArray[Idx_WIND_VX],
-          grib->m_GribRecordPtrArray[Idx_WIND_VY], lon, lat))
-    return false;
-
-  vwg *= 3.6 / 1.852;  // knots
-
-#if 0
-// test
-	VWG = 0.;
-	WG = 0.;
-#endif
-
-  return true;
-}
-
-void ShipDriverPi::SetNMEASentence(wxString& sentence) {
+void rowerPi::SetNMEASentence(wxString& sentence) {
   if (m_dialog) {
-    m_dialog->SetNMEAMessage(sentence);
+    m_dialog->parseNMEASentence(sentence);
   }
 }

@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Project:  OpenCPN
- * Purpose:  ShipDriver Plugin
+ * Purpose: rower Plugin
  * Author:   Mike Rossiter
  *
  ***************************************************************************
@@ -33,8 +33,8 @@
 #endif
 
 #include "AisMaker.h"
-#include "shipdriver_pi.h"
-#include "shipdriver_gui.h"
+#include "rower_pi.h"
+#include "rower_gui.h"
 #include "ocpn_plugin.h"
 #include "tinyxml.h"
 #include "wx/process.h"
@@ -56,6 +56,8 @@
 #include <wx/list.h>
 #include <wx/window.h>
 #include <wx/menu.h>
+#include <wx/timer.h>
+
 
 #define ID_SOMETHING 2001
 #define ID_SOMETHING_ELSE 2002
@@ -65,15 +67,15 @@
 #define METER_2_FATHOM 0.5468066492
 
 #ifdef __WXOSX__
-#define SHIPDRIVER_DLG_STYLE \
+#definerower_DLG_STYLE \
   wxCLOSE_BOX | wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxSTAY_ON_TOP
 #else
-#define SHIPDRIVER_DLG_STYLE \
+#define rower_DLG_STYLE \
   wxCLOSE_BOX | wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER
 #endif
 using namespace std;
 
-class ShipDriverPi;
+class rowerPi;
 
 class rtept {
 public:
@@ -106,13 +108,13 @@ public:
 
 class AisMaker;
 
-class Dlg : public ShipDriverBase {
+class Dlg : public rowerBase {
 public:
   Dlg(wxWindow* parent, wxWindowID id = wxID_ANY,
-      const wxString& title = _("ShipDriver"),
+      const wxString& title = _("rower"),
       const wxPoint& pos = wxDefaultPosition,
-      const wxSize& size = wxDefaultSize, long style = SHIPDRIVER_DLG_STYLE);
-  ShipDriverPi* plugin;
+      const wxSize& size = wxDefaultSize, long style =rower_DLG_STYLE);
+ rowerPi* plugin;
 
 #ifdef __ANDROID__
   void OnMouseEvent(wxMouseEvent& event);
@@ -126,32 +128,6 @@ public:
 
 #endif
 
-  wxString createVHWSentence(double stw, double hdg);
-  wxString createMWVTSentence(double spd, double hdg, double winddirection,
-                              double windspeed);
-  wxString createMWVASentence(double spd, double hdg, double winddirection,
-                              double windspeed);
-  wxString createMWDSentence(double winddirection, double windspeed);
-  wxString createRMCSentence(wxDateTime myTime, double myLat, double myLon,
-                             double mySpd, double myDir);
-  wxString createGLLSentence(wxDateTime myTime, double myLat, double myLon,
-                             double mySpd, double myDir);
-  wxString createVTGSentence(double mySpd, double myDir);
-  wxString createHDTSentence(double myDir);
-  wxString createDBTSentence(double myDepthMeter);
-
-  // DSC Sentences
-  wxString createDSCAlertSentence(double lat, double lon, int mmsi,
-                                  wxString nature, wxString time);
-  wxString createDSCExpansionSentence(double lat, double lon, int mmsi);
-  wxString createDSCAlertCancelSentence(double lat, double lon, int mmsi,
-                                        wxString nature, wxString time);
-  wxString createDSCAlertRelaySentence(double lat, double lon, int mmsi,
-                                       int dmmsi, wxString nature,
-                                       wxString time);
-  wxString createDSCAlertRelayCancelSentence(double lat, double lon, int mmsi,
-                                             int dmmsi, wxString nature,
-                                             wxString time);
 
   wxString LatitudeToString(double mLat);
   wxString LongitudeToString(double mLon);
@@ -189,12 +165,14 @@ public:
 
   double myDir;
   void SetNMEAMessage(wxString sentence);
-  bool m_bGotAPB;
+  bool m_bGotAPB;  
+  void parseNMEASentence(wxString& sentence);
 
 protected:
   bool m_bNeedsGrib;
 
 private:
+  wxString row_vtg;
   void Notify();
   wxString MWD, VHW, MWVA, MWVT, GLL, VTG, HDT, RMC, MDBT;
   double initDir, initSpd, initRudder, myDist, followStepDistance;
@@ -225,7 +203,6 @@ private:
   bool SART_active;
 
   wxString ParseNMEAIdentifier(wxString sentence);
-  wxString ParseNMEASentence(wxString sentence, wxString id);
 
   void SetNextStep(double inLat, double inLon, double inDir, double inSpd,
                    double& outLat, double& outLon);
@@ -306,14 +283,6 @@ private:
   double m_lonCollision;
   double m_collisionDir;
 
-  void OnSART(wxCommandEvent& event);
-  void OnMOB(wxCommandEvent& event);
-  void OnEPIRB(wxCommandEvent& event);
-  void OnDistressAlert(wxCommandEvent& event);
-  void OnDistressCancel(wxCommandEvent& event);
-  void OnDistressRelay(wxCommandEvent& event);
-  void OnRelayCancel(wxCommandEvent& event);
-  void OnCollision(wxCommandEvent& event);
   void OnPause(wxCommandEvent& event);
   void ResetPauseButton();
 
@@ -323,23 +292,16 @@ private:
   virtual void Unlock() { routemutex.Unlock(); }
   wxMutex routemutex;
 
-  void RequestGrib(wxDateTime time);
-  bool GetGribSpdDir(wxDateTime dt, double lat, double lon, double& spd,
-                     double& dir);
-  void OnWind(wxCommandEvent& event);
-  double GetPolarSpeed(double lat, double lon, double cse);
+  wxString createRMCSentence(wxDateTime myDateTime, double myLat,
+                                  double myLon, double mySpd, double myDir); 
+  wxString createVTGSentence(double mySpd, double myDir);
 
   double AttributeDouble(TiXmlElement* e, const char* name, double def);
-  double ReadPolars(wxString filename, double windangle, double windspeed);
 
-  double ReadNavobj();
   static wxString StandardPath();
 
-  bool m_bUsingWind;
   bool m_bUsingFollow;
-  bool m_bInvalidPolarsFile;
-  bool m_bInvalidGribFile;
-  bool m_bShipDriverHasStarted;
+  bool m_browerHasStarted;
 
   Plugin_WaypointExList* myList;
 };

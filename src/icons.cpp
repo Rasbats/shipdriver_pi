@@ -6,7 +6,7 @@
 #include "icons.h"
 #include <wx/mstream.h>
 
-wxBitmap* _img_ShipDriverIcon;
+wxBitmap* _img_rowerIcon;
 
 void initialize_images(void) {
   {
@@ -65,6 +65,6 @@ void initialize_images(void) {
         "00\335\277\316\310\000\000\000\031tEXtSoftware\000www.inkscape."
         "org\233\356<\032\000\000\000\000IEND\256B`\202",
         959);
-    _img_ShipDriverIcon = new wxBitmap(wxImage(sm));
+    _img_rowerIcon = new wxBitmap(wxImage(sm));
   }
 }

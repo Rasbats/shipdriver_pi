@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Project:  OpenCPN
- * Purpose:  ShipDriver Plugin
+ * Purpose: rower Plugin
  * Author:   Mike Rossiter
  *
  ***************************************************************************
@@ -45,43 +45,21 @@
 #include "json/writer.h"
 
 #include "ocpn_plugin.h"  //Required for OCPN plugin functions
-#include "shipdriver_gui_impl.h"
-#include "GribRecordSet.h"
+#include "rower_gui_impl.h"
 
-// Define minimum and maximum versions of the grib plugin supported
-#define GRIB_MAX_MAJOR 4
-#define GRIB_MAX_MINOR 1
-#define GRIB_MIN_MAJOR 4
-#define GRIB_MIN_MINOR 1
 
 class Dlg;
-
-static inline bool GribCurrent(GribRecordSet* grib, double lat, double lon,
-                               double& c, double& vc) {
-  if (!grib) return false;
-
-  if (!GribRecord::getInterpolatedValues(
-          vc, c, grib->m_GribRecordPtrArray[Idx_WIND_VX],
-          grib->m_GribRecordPtrArray[Idx_WIND_VY], lon, lat))
-    return false;
-
-  vc *= 3.6 / 1.852;  // knots
-
-  // C += 180;
-  if (c > 360) c -= 360;
-  return true;
-}
 
 //----------------------------------------------------------------------------------------------------------
 //    The PlugIn Class Definition
 //----------------------------------------------------------------------------------------------------------
 
-#define ShipDriver_TOOL_POSITION (-1)  ///< toolbar tool default positioning
+#define rower_TOOL_POSITION (-1)  ///< toolbar tool default positioning
 
-class ShipDriverPi : public opencpn_plugin_118 {
+class rowerPi : public opencpn_plugin_118 {
 public:
-  explicit ShipDriverPi(void* ppimgr);
-  ~ShipDriverPi() override;
+  explicit rowerPi(void* ppimgr);
+  ~rowerPi() override;
 
   //    The required PlugIn Methods
   int Init() override;
@@ -114,13 +92,13 @@ public:
   void SetNMEASentence(wxString& sentence) override;
 
   //    Other public methods
-  void SetShipDriverDialogX(int x) { m_hr_dialog_x = x; };
-  void SetShipDriverDialogY(int x) { m_hr_dialog_y = x; };
-  void SetShipDriverDialogWidth(int x) { m_hr_dialog_width = x; };
-  void SetShipDriverDialogHeight(int x) { m_hr_dialog_height = x; };
-  void SetShipDriverDialogSizeX(int x) { m_hr_dialog_sx = x; }
-  void SetShipDriverDialogSizeY(int x) { m_hr_dialog_sy = x; }
-  void OnShipDriverDialogClose();
+  void SetrowerDialogX(int x) { m_hr_dialog_x = x; };
+  void SetrowerDialogY(int x) { m_hr_dialog_y = x; };
+  void SetrowerDialogWidth(int x) { m_hr_dialog_width = x; };
+  void SetrowerDialogHeight(int x) { m_hr_dialog_height = x; };
+  void SetrowerDialogSizeX(int x) { m_hr_dialog_sx = x; }
+  void SetrowerDialogSizeY(int x) { m_hr_dialog_sy = x; }
+  void OnrowerDialogClose();
 
   int m_hr_dialog_x, m_hr_dialog_y;
 
@@ -128,12 +106,7 @@ public:
   [[nodiscard]] double GetCursorLon() const { return m_cursor_lon; }
 
   void ShowPreferencesDialog(wxWindow* parent) override;
-  void SetPluginMessage(wxString& message_id, wxString& message_body) override;
-  [[maybe_unused]] bool GribWind(GribRecordSet* grib, double lat, double lon,
-                                 double& wg, double& vwg);
 
-  bool m_is_grib_valid;
-  double m_grib_lat, m_grib_lon;
   double m_tr_spd;
   double m_tr_dir;
   wxBitmap m_panel_bitmap;
@@ -145,7 +118,7 @@ private:
   int m_position_menu_id;
   double m_gui_scale_factor;
 
-  ShipDriverPi* plugin;
+ rowerPi* plugin;
 
   Dlg* m_dialog;
 
@@ -158,8 +131,8 @@ private:
   int m_hr_dialog_sx, m_hr_dialog_sy;
   int m_display_width, m_display_height;
   int m_leftclick_tool_id;
-  bool m_show_shipdriver_icon;
-  bool m_show_shipdriver;
+  bool m_show_rower_icon;
+  bool m_show_rower;
 
   bool m_copy_use_ais;
   bool m_copy_use_file;

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,18 +25,17 @@
 #include <wx/icon.h>
 #include <wx/tglbtn.h>
 #include <wx/stattext.h>
-#include <wx/statbox.h>
 #include <wx/timer.h>
 #include <wx/dialog.h>
 #include <wx/checkbox.h>
+#include <wx/statbox.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
-/// Class ShipDriverBase
+/// Class rowerBase
 ///////////////////////////////////////////////////////////////////////////////
-class ShipDriverBase : public wxDialog
+class rowerBase : public wxDialog
 {
 	private:
 
@@ -53,21 +52,7 @@ class ShipDriverBase : public wxDialog
 		wxStaticText* m_staticText7;
 		wxStaticText* m_staticText8;
 		wxButton* m_buttonStandby;
-		wxButton* m_buttonAuto;
 		wxButton* m_button7;
-		wxButton* m_buttonWind;
-		wxButton* m_buttonMinus1;
-		wxButton* m_buttonMinus10;
-		wxButton* m_buttonPlus10;
-		wxButton* m_buttonPlus1;
-		wxToggleButton* m_buttonSART;
-		wxToggleButton* m_buttonMOB;
-		wxToggleButton* m_buttonEPIRB;
-		wxToggleButton* m_buttonDistressAlert;
-		wxToggleButton* m_buttonDistressCancel;
-		wxToggleButton* m_buttonDistressRelay;
-		wxToggleButton* m_buttonRelayCancel;
-		wxToggleButton* m_buttonCollision;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
@@ -77,21 +62,7 @@ class ShipDriverBase : public wxDialog
 		virtual void OnStop( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPause( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnStandby( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnAuto( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFollow( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnWind( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnMinus1( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnMinus10( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPlus10( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPlus1( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSART( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnMOB( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnEPIRB( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDistressAlert( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDistressCancel( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnDistressRelay( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRelayCancel( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCollision( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTimer( wxTimerEvent& event ) { event.Skip(); }
 
 
@@ -102,19 +73,18 @@ class ShipDriverBase : public wxDialog
 		wxStaticText* m_stHeading;
 		wxStaticText* m_stSpeed;
 		wxSlider* m_SliderSpeed;
-		wxTextCtrl* m_textCtrlSART;
 		wxTimer m_timer1;
 
-		ShipDriverBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		rowerBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("rower"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
-		~ShipDriverBase();
+		~rowerBase();
 
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class shipdriverPreferences
+/// Class rowerPreferences
 ///////////////////////////////////////////////////////////////////////////////
-class shipdriverPreferences : public wxDialog
+class rowerPreferences : public wxDialog
 {
 	private:
 
@@ -129,9 +99,9 @@ class shipdriverPreferences : public wxDialog
 		wxTextCtrl* m_textCtrlMMSI;
 		wxCheckBox* m_cbNMEAToFile;
 
-		shipdriverPreferences( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Preferences"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxRESIZE_BORDER );
+		rowerPreferences( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Preferences"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxRESIZE_BORDER );
 
-		~shipdriverPreferences();
+		~rowerPreferences();
 
 };
 
