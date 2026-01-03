@@ -72,6 +72,7 @@ Dlg::Dlg(wxWindow* parent, wxWindowID id, const wxString& title,
   m_browerHasStarted = false;
 
   m_bGotAPB = false;
+  row_vtg = "0";
 
 #ifdef __ANDROID__
 
@@ -309,7 +310,7 @@ void Dlg::StartDriving() {
 
   m_textCtrlRudderStbd->SetValue("");
   m_textCtrlRudderPort->SetValue("");
-  initSpd = 0;  // 5 knots
+  initSpd = 0; // 5 knots
 
   if (!m_bUsingFollow) {
     wxString myHeading = m_stHeading->GetLabel();
@@ -434,12 +435,15 @@ void Dlg::parseNMEASentence(wxString& sentence) {
     token[i] = tokenizer.GetNextToken();
     i++;
   }
-  if (token[0].Right(3) == _T("VDM")) {
+  if (token[0].Right(3) == "VTG") {
     s5 = token[5];
 
     row_vtg = s5;
-    wxMessageBox(row_vtg);
+    //wxMessageBox(row_vtg);
   }
+
+  //row_vtg = "16";
+
 }
 
 
@@ -480,7 +484,8 @@ void Dlg::Notify() {
 
   wxString mySentence;
   plugin->SetNMEASentence(mySentence);
-  initSpd = m_SliderSpeed->GetValue();
+  initSpd = wxAtof(row_vtg);
+//m_SliderSpeed->GetValue();
   initRudder = m_SliderRudder->GetValue();
 
   double myRudder = initRudder - 30;
