@@ -13,16 +13,16 @@
 # -------- Options ----------
 
 set(OCPN_TEST_REPO
-    "opencpn/rower-alpha"
+    "opencpn/shipdriver-alpha"
     CACHE STRING "Default repository for untagged builds"
 )
 set(OCPN_BETA_REPO
-    "opencpn/rower-beta"
+    "opencpn/shipdriver-beta"
     CACHE STRING
     "Default repository for tagged builds matching 'beta'"
 )
 set(OCPN_RELEASE_REPO
-    "opencpn/rower-prod"
+    "opencpn/shipdriver-prod"
     CACHE STRING
     "Default repository for tagged builds not matching 'beta'"
 )
@@ -31,12 +31,12 @@ set(OCPN_RELEASE_REPO
 #
 # -------  Plugin setup --------
 #
-set(PKG_NAME rower_pi)
+set(PKG_NAME ShipDriver_pi)
 set(PKG_VERSION  3.4.7)
 set(PKG_PRERELEASE "")  # Empty, or a tag like 'beta'
 
-set(DISPLAY_NAME rower)    # Dialogs, installer artifacts, ...
-set(PLUGIN_API_NAME rower) # As of GetCommonName() in plugin API
+set(DISPLAY_NAME ShipDriver)    # Dialogs, installer artifacts, ...
+set(PLUGIN_API_NAME ShipDriver) # As of GetCommonName() in plugin API
 set(PKG_SUMMARY "Simulate ship movements")
 set(PKG_DESCRIPTION [=[
 Simulates navigation of a vessel. Using the sail option and a current
@@ -47,18 +47,18 @@ data from itself. This can be replayed to simulate collision situations.
 
 set(PKG_AUTHOR "Mike Rossiter")
 set(PKG_IS_OPEN_SOURCE "yes")
-set(PKG_HOMEPAGE https://github.com/Rasbats/rower_pi)
-set(PKG_INFO_URL https://opencpn.org/OpenCPN/plugins/rower.html)
+set(PKG_HOMEPAGE https://github.com/Rasbats/shipdriver_pi)
+set(PKG_INFO_URL https://opencpn.org/OpenCPN/plugins/shipdriver.html)
 
 set(SRC
-    src/rower_pi.h
-    src/rower_pi.cpp
+    src/shipdriver_pi.h
+    src/shipdriver_pi.cpp
     src/icons.h
     src/icons.cpp
-    src/rower_gui.h
-    src/rower_gui.cpp
-    src/rower_gui_impl.cpp
-    src/rower_gui_impl.h
+    src/shipdriver_gui.h
+    src/shipdriver_gui.cpp
+    src/shipdriver_gui_impl.cpp
+    src/shipdriver_gui_impl.h
     src/AisMaker.h
     src/AisMaker.cpp
     src/GribRecord.cpp
