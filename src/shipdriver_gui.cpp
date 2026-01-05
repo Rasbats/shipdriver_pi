@@ -422,7 +422,7 @@ ShipDriverBase::~ShipDriverBase()
 	m_buttonDistressRelay->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnDistressRelay ), NULL, this );
 	m_buttonRelayCancel->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnRelayCancel ), NULL, this );
 	m_buttonCollision->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnCollision ), NULL, this );
-  this->Connect(wxID_ANY, wxEVT_TIMER,
+  this->Disconnect(wxID_ANY, wxEVT_TIMER,
                       wxTimerEventHandler(ShipDriverBase::OnTimer));
 }
 
