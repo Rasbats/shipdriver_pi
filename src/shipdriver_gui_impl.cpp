@@ -446,7 +446,7 @@ void Dlg::OnAuto(wxCommandEvent& event) {
 void Dlg::SetNMEAMessage(wxString sentence) {
   // $GPAPB,A,A,0.10,R,N,V,V,011,M,DEST,011,M,011,M*3C
   wxString token[40];
-  wxString s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11;
+  wxString s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13;
   token[0] = "";
 
   wxStringTokenizer tokenizer(sentence, ",");
@@ -457,12 +457,12 @@ void Dlg::SetNMEAMessage(wxString sentence) {
   }
 
   if (token[0].Right(3) == "APB") {
-    s11 = token[11];
+    s13 = token[13];
 
     m_bGotAPB = true;
     if (m_bAuto) {
       double value;
-      s11.ToDouble(&value);
+      s13.ToDouble(&value);
       myDir = value;
     }
   }
