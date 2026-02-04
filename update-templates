@@ -161,7 +161,6 @@ for f in \
     .gitignore \
     INSTALL.md \
     plugin.xml.in \
-    .travis.yml \
     update-templates \
     UPDATE_TEMPLATES.md \
     $CMakeLists
@@ -187,13 +186,13 @@ sed -i 's|leamas/opencpn-libs|opencpn/opencpn-libs|g' \
 
 # Update flatpak runtime version as required:
 $SED_I \
-    -e '/sdk: org.freedesktop.Sdk/s/20.08/22.08/' \
+    -e '/sdk: org.freedesktop.Sdk/s/2[0-9\.]*/25.08/' \
     -e '/^runtime-version:/s/:.*/: stable/' \
   flatpak/org.opencpn.OpenCPN.Plugin.*.yaml
 git add flatpak
 git diff-index --quiet --cached HEAD -- || {
-    echo "Updating Updating flatpak runtime version to 22.08"
-    git commit --no-verify -m "opencpn-libs: Update to latest version."
+    echo "Updating Updating flatpak runtime version to 25.08"
+    git commit --no-verify -m "Updating flatpak runtime to 25.08."
 }
 
 # Check for files/dirs which are private, but should be copied on first run.
@@ -261,7 +260,13 @@ git diff --quiet build-deps/control || {
         -m "build-deps/control: Updating libunarr-dev dependency"
 }
 
-for f in buildosx buildwin/NSIS* libs/AndroidLibs.cmake mingw .drone.yml; do
+for f in  buildosx \
+    buildwin/NSIS* \
+    libs/AndroidLibs.cmake \
+    mingw \
+    .drone.yml \
+    .travis.yml
+do
     if test -e $f; then git rm -rf $f; fi
 done
 git diff-index --quiet --cached HEAD -- || {
