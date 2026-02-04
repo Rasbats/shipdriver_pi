@@ -161,6 +161,7 @@ for f in \
     .gitignore \
     INSTALL.md \
     plugin.xml.in \
+    .pre-commit.yaml \
     update-templates \
     UPDATE_TEMPLATES.md \
     $CMakeLists
