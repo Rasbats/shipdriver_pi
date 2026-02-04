@@ -134,7 +134,7 @@ jobs:
     environment:
       - OCPN_TARGET: flatpak-arm64
       - CMAKE_BUILD_PARALLEL_LEVEL: 2
-      - BRANCH: stable
+      - BRANCH: 2208
     parameters:
       cache-key:
         type: string
@@ -149,12 +149,27 @@ jobs:
     environment:
       - OCPN_TARGET: flatpak-arm64
       - CMAKE_BUILD_PARALLEL_LEVEL: 2
-      - BRANCH: beta
+      - BRANCH: 2408
     parameters:
       cache-key:
         type: string
         # Update the last part, here v2, to invalidate cache
-        default: "fp-arm20-v2"
+        default: "fp-arm24-v2"
+    <<: *flatpak-steps
+
+  build-flatpak-arm64-2508:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: arm.medium
+    environment:
+      - OCPN_TARGET: flatpak-arm64
+      - CMAKE_BUILD_PARALLEL_LEVEL: 2
+      - BRANCH: 2508
+    parameters:
+      cache-key:
+        type: string
+        # Update the last part, here v2, to invalidate cache
+        default: "fp-arm25-v2"
     <<: *flatpak-steps
 
   build-flatpak-x86:
@@ -163,7 +178,7 @@ jobs:
     environment:
       - OCPN_TARGET: flatpak
       - CMAKE_BUILD_PARALLEL_LEVEL: 2
-      - BRANCH: stable
+      - BRANCH: 2208
     parameters:
       cache-key:
         type: string
@@ -177,40 +192,26 @@ jobs:
     environment:
       - OCPN_TARGET: flatpak
       - CMAKE_BUILD_PARALLEL_LEVEL: 2
-      - BRANCH: beta
+      - BRANCH: 2408
     parameters:
       cache-key:
         type: string
         # Update the last part, here v2, to invalidate cache
-        default: "fp-x86-20-v2"
+        default: "fp-x86-24-v2"
     <<: *flatpak-steps
-
-  build-macos:
-      macos:
-        xcode: "14.3.1"
-      environment:
-        - OCPN_TARGET: macos
-        - CMAKE_BUILD_PARALLEL_LEVEL: 2
-      steps:
-        - checkout
-        - run: sudo chmod go+w /usr/local
-        - restore_cache:
-            key: "{{checksum \"build-deps/macos-cache-stamp\"}}\
-              -{{checksum \"cmake/MacosWxwidgets.cmake\"}}\
-              -{{checksum \"ci/circleci-build-macos.sh\"}}"
-        - run: ci/circleci-build-macos.sh
-        - save_cache:
-            key: "{{checksum \"build-deps/macos-cache-stamp\"}}\
-              -{{checksum \"cmake/MacosWxwidgets.cmake\"}}\
-              -{{checksum \"ci/circleci-build-macos.sh\"}}"
-            paths:
-              - /tmp/local.cache.tar
-              - /Users/distiller/project/cache
-        - run: >
-            sh -c "otool -L build-osx/app/*/OpenCPN.app/Contents/PlugIns/*.dylib"
-        - run: cd build-osx; /bin/bash < upload.sh
-        - run: ci/git-push.sh  build-osx
-
+  build-flatpak-x86-2508:
+    machine:
+      image: ubuntu-2204:current
+    environment:
+      - OCPN_TARGET: flatpak
+      - CMAKE_BUILD_PARALLEL_LEVEL: 2
+      - BRANCH: 2508
+    parameters:
+      cache-key:
+        type: string
+        # Update the last part, here v2, to invalidate cache
+        default: "fp-x86-25-v2"
+    <<: *flatpak-steps
 
   build-macos-universal:
     macos:
@@ -312,12 +313,18 @@ workflows:
       - build-flatpak-x86-2408:
           <<: *std-filters
 
+      - build-flatpak-arm64-2508:
+          <<: *std-filters
+
+      - build-flatpak-x86-2508:
+          <<: *std-filters
+
       - build-macos-universal:
           <<: *std-filters
 
       - build-macos-intel-legacy:
-          <<: *std-filters      
-      
+          <<: *std-filters
+
       - build-android-arm64:
           <<: *std-filters
 
