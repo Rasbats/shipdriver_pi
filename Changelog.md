@@ -1,7 +1,7 @@
 3.4.4 TBD
-* Add new Flatpak build using runtime 25.08 for OpenCPN 5.14
-* update-templates: bugfixes and clean up.
-* Use segment 13 from APB sentence
+* Add new Flatpak build using runtime 25.08 for OpenCPN 5.14 - #631
+* update-templates: bugfixes and clean up - #637
+* Use segment 13 from APB sentence - #639
 
 3.4.3 Dec 28, 2025
 * update-templates: syntax bugfix
