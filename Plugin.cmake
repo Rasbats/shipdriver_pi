@@ -98,4 +98,7 @@ macro(add_plugin_libraries)
   # The wxsvg library enables SVG overall in the plugin
   add_subdirectory("${CMAKE_SOURCE_DIR}/opencpn-libs/wxsvg")
   target_link_libraries(${PACKAGE_NAME} ocpn::wxsvg)
+
+  add_subdirectory("${CMAKE_SOURCE_DIR}/opencpn-libs/nmea0183")
+  target_link_libraries(${PACKAGE_NAME} ocpn::nmea0183)
 endmacro ()
