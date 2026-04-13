@@ -1933,6 +1933,7 @@ void Dlg::OnWind(wxCommandEvent& event) {
 }
 
 double Dlg::GetPolarSpeed(double lat, double lon, double cse) {
+  m_bInvalidPolarsFile = false;
   double lati = lat;
   double loni = lon;
   double spd;
@@ -1954,6 +1955,9 @@ double Dlg::GetPolarSpeed(double lat, double lon, double cse) {
 
   wxString polars_path = GetPluginDataDir(pName) + s + "data" + s;
   wxString myFile = polars_path + "arcona.xml";
+  if (plugin && !plugin->GetPolarFile().IsEmpty()) {
+    myFile = plugin->GetPolarFile();
+  }
 
   double twa = 360 - ((cse - dir) - 360);
   if (twa > 360) {
@@ -1972,87 +1976,178 @@ double Dlg::GetPolarSpeed(double lat, double lon, double cse) {
 }
 
 double Dlg::ReadPolars(wxString filename, double windangle, double windspeed) {
-  bool foundWindAngle = false;
-  bool foundWindSpeed = false;
-  // bool foundPreviousWindAngle = false;
-
-  double myWindAngle = -1;
-  double myWindSpeed = -1;
-  double prevAngle = -1;
-  double prevSpeed = -1;
-  // double dSpeed = -1;
-  double prevPolarSpeed = -1;
-  wxString myPolarSpeed;
-
-  wxString theWindAngle;
-
+  m_bInvalidPolarsFile = false;
   TiXmlDocument doc;
-  wxString error;
-
-  wxFileName fn(filename);
 
   if (!doc.LoadFile(filename.mb_str())) {
-    m_bInvalidPolarsFile = true;
-    return -1;
+    return ReadPolarsTable(filename, windangle, windspeed);
   } else {
     TiXmlHandle root(doc.RootElement());
 
-    if (strcmp(root.Element()->Value(), "ShipDriver")) {
+    if (!root.Element() || strcmp(root.Element()->Value(), "ShipDriver")) {
+      return ReadPolarsTable(filename, windangle, windspeed);
+    }
+
+    TiXmlElement* selected_twa = nullptr;
+    for (TiXmlElement* e = root.FirstChild().Element(); e;
+         e = e->NextSiblingElement()) {
+      if (strcmp(e->Value(), "TWA")) continue;
+
+      double twa_value = AttributeDouble(e, "WindAngle", NAN);
+      if (std::isnan(twa_value)) continue;
+
+      if (!selected_twa) selected_twa = e;
+      if (twa_value <= windangle) {
+        selected_twa = e;
+      } else if (selected_twa) {
+        break;
+      }
+    }
+
+    if (!selected_twa) {
       m_bInvalidPolarsFile = true;
       return -1;
     }
 
-    int count = 0;
-    for (TiXmlElement* e = root.FirstChild().Element(); e;
-         e = e->NextSiblingElement())
-      count++;
+    TiXmlElement* selected_spd = nullptr;
+    for (TiXmlElement* g = selected_twa->FirstChildElement(); g;
+         g = g->NextSiblingElement()) {
+      if (strcmp(g->Value(), "SPD")) continue;
 
-    int i = 0;
-    for (TiXmlElement* e = root.FirstChild().Element(); e;
-         e = e->NextSiblingElement(), i++) {
-      if (!strcmp(e->Value(), "TWA") && windangle > myWindAngle &&
-          !foundWindAngle && !foundWindSpeed) {
-        myWindAngle = AttributeDouble(e, "WindAngle", NAN);
-        if (prevAngle < windangle && windangle < myWindAngle) {
-          theWindAngle = wxString::Format("%5.2f", prevAngle);
-          foundWindAngle = true;
-          break;
-        }
-        prevAngle = myWindAngle;
+      double tws_value = AttributeDouble(g, "WindSpeed", NAN);
+      if (std::isnan(tws_value)) continue;
+
+      if (!selected_spd) selected_spd = g;
+      if (tws_value <= windspeed) {
+        selected_spd = g;
+      } else if (selected_spd) {
+        break;
       }
     }
 
-    if (foundWindAngle) {
-      // we have found the polar for the next highest wind speed
-      // need to move back to the previous polar ... given by windAngle
+    if (!selected_spd || !selected_spd->GetText()) {
+      m_bInvalidPolarsFile = true;
+      return -1;
+    }
 
-      TiXmlElement* e;
-      for (e = root.FirstChild().Element(); e;
-           e = e->NextSiblingElement(), i++) {
-        if (!strcmp(e->Value(), "TWA")) {
-          myWindAngle = AttributeDouble(e, "WindAngle", NAN);
-          wxString angleOut = wxString::Format("%5.2f", myWindAngle);
-          if (angleOut == theWindAngle) {  // we have found the correct section
-                                           // of the polars file    for the
-                                           // relative wind
-            for (TiXmlElement* g = e->FirstChildElement(); g;
-                 g = g->NextSiblingElement()) {
-              if (!strcmp(g->Value(), "SPD") && windspeed > myWindSpeed) {
-                myWindSpeed = AttributeDouble(g, "WindSpeed", NAN);
-                wxString myPolarSpeed = g->GetText();
-                double dSpeed;
-                myPolarSpeed.ToDouble(&dSpeed);
+    double polar_speed;
+    if (wxString(selected_spd->GetText()).ToDouble(&polar_speed)) {
+      return polar_speed;
+    }
+  }
 
-                if (prevSpeed < windspeed && windspeed < myWindSpeed) {
-                  return prevPolarSpeed;
-                }
+  m_bInvalidPolarsFile = true;
+  return -1;
+}
 
-                prevSpeed = myWindSpeed;  // attribute for wind speed
-                prevPolarSpeed = dSpeed;  // value for boat speed
-              }
-            }
-          }
-        }
+double Dlg::ReadPolarsTable(wxString filename, double windangle,
+                            double windspeed) {
+  wxTextFile file;
+  if (!file.Open(filename)) {
+    m_bInvalidPolarsFile = true;
+    return -1;
+  }
+
+  if (file.GetLineCount() < 2) {
+    m_bInvalidPolarsFile = true;
+    return -1;
+  }
+
+  wxString header = file.GetFirstLine();
+  wxString delimiter = ";";
+  if (header.Find('\t') != wxNOT_FOUND) {
+    delimiter = "\t";
+  } else if (header.Find(';') != wxNOT_FOUND) {
+    delimiter = ";";
+  } else if (header.Find(',') != wxNOT_FOUND) {
+    delimiter = ",";
+  }
+
+  wxStringTokenizer header_tokens(header, delimiter, wxTOKEN_RET_EMPTY_ALL);
+  wxArrayString columns;
+  while (header_tokens.HasMoreTokens()) {
+    columns.Add(header_tokens.GetNextToken().Trim(true).Trim(false));
+  }
+
+  wxString header_key = columns.IsEmpty() ? wxString() : columns[0].Lower();
+  header_key.Replace("\\", "/");
+
+  if (columns.size() < 2 ||
+      !(header_key.StartsWith("twa/tws") || header_key == "twa")) {
+    m_bInvalidPolarsFile = true;
+    return -1;
+  }
+
+  wxVector<double> tws_values;
+  for (size_t i = 1; i < columns.size(); ++i) {
+    double value;
+    if (!columns[i].ToDouble(&value)) {
+      m_bInvalidPolarsFile = true;
+      return -1;
+    }
+    tws_values.push_back(value);
+  }
+
+  wxVector<double> twa_values;
+  wxVector<wxVector<double>> polar_rows;
+  for (size_t row = 1; row < file.GetLineCount(); ++row) {
+    wxString line = file.GetLine(row);
+    if (line.Trim(true).Trim(false).IsEmpty()) continue;
+
+    wxStringTokenizer row_tokens(line, delimiter, wxTOKEN_RET_EMPTY_ALL);
+    wxArrayString cells;
+    while (row_tokens.HasMoreTokens()) {
+      cells.Add(row_tokens.GetNextToken().Trim(true).Trim(false));
+    }
+
+    if (cells.IsEmpty()) continue;
+
+    double twa_value;
+    if (!cells[0].ToDouble(&twa_value)) continue;
+
+    wxVector<double> polar_values(tws_values.size(), NAN);
+    for (size_t col = 0; col < tws_values.size(); ++col) {
+      size_t cell_index = col + 1;
+      if (cell_index >= cells.size() || cells[cell_index].IsEmpty()) continue;
+
+      double polar_speed;
+      if (cells[cell_index].ToDouble(&polar_speed)) {
+        polar_values[col] = polar_speed;
+      }
+    }
+
+    twa_values.push_back(twa_value);
+    polar_rows.push_back(polar_values);
+  }
+
+  if (twa_values.empty()) {
+    m_bInvalidPolarsFile = true;
+    return -1;
+  }
+
+  size_t selected_row = 0;
+  for (size_t row = 0; row < twa_values.size(); ++row) {
+    if (twa_values[row] <= windangle) {
+      selected_row = row;
+    } else {
+      break;
+    }
+  }
+
+  size_t selected_col = 0;
+  for (size_t col = 0; col < tws_values.size(); ++col) {
+    if (tws_values[col] <= windspeed) {
+      selected_col = col;
+    } else {
+      break;
+    }
+  }
+
+  for (long row = static_cast<long>(selected_row); row >= 0; --row) {
+    for (long col = static_cast<long>(selected_col); col >= 0; --col) {
+      double polar_speed = polar_rows[row][col];
+      if (!std::isnan(polar_speed)) {
+        return polar_speed;
       }
     }
   }

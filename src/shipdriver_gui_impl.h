@@ -331,6 +331,7 @@ private:
 
   double AttributeDouble(TiXmlElement* e, const char* name, double def);
   double ReadPolars(wxString filename, double windangle, double windspeed);
+  double ReadPolarsTable(wxString filename, double windangle, double windspeed);
 
   double ReadNavobj();
   static wxString StandardPath();

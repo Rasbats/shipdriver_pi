@@ -128,10 +128,11 @@ class shipdriverPreferences : public wxDialog
 		wxCheckBox* m_cbAisToFile;
 		wxTextCtrl* m_textCtrlMMSI;
 		wxCheckBox* m_cbNMEAToFile;
+		wxTextCtrl* m_textCtrlPolarFile;
+		wxButton* m_buttonPolarBrowse;
 
 		shipdriverPreferences( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Preferences"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxRESIZE_BORDER );
 
 		~shipdriverPreferences();
 
 };
-

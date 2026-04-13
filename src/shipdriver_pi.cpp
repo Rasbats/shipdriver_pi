@@ -31,6 +31,8 @@
 #include "wx/wx.h"
 #endif
 
+#include <wx/filedlg.h>
+
 #include "config.h"
 #include "icons.h"
 #include "shipdriver_pi.h"
@@ -246,13 +248,32 @@ void ShipDriverPi::ShowPreferencesDialog(wxWindow* parent) {
   pref->m_cbAisToFile->SetValue(m_copy_use_file);
   pref->m_textCtrlMMSI->SetValue(m_copy_mmsi);
   pref->m_cbNMEAToFile->SetValue(m_copy_use_nmea);
+  pref->m_textCtrlPolarFile->SetValue(m_polar_file);
+  pref->m_buttonPolarBrowse->Bind(wxEVT_BUTTON, [pref, this](wxCommandEvent&) {
+    wxFileDialog filedlg(
+        pref, _("Choose a polar file"), wxEmptyString, wxEmptyString,
+        _("Polar files (*.xml;*.pol)|*.xml;*.pol|XML files (*.xml)|*.xml|POL files (*.pol)|*.pol|All files (*.*)|*.*"),
+        wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+
+    if (!m_polar_file.IsEmpty()) {
+      wxFileName filename(m_polar_file);
+      filedlg.SetDirectory(filename.GetPath());
+      filedlg.SetFilename(filename.GetFullName());
+    }
+
+    if (filedlg.ShowModal() == wxID_OK) {
+      pref->m_textCtrlPolarFile->SetValue(filedlg.GetPath());
+    }
+  });
 
   if (pref->ShowModal() == wxID_OK) {
     bool copy_ais = pref->m_cbTransmitAis->GetValue();
     bool copy_file = pref->m_cbAisToFile->GetValue();
     wxString copyMMSI = pref->m_textCtrlMMSI->GetValue();
     bool copy_nmea = pref->m_cbNMEAToFile->GetValue();
-
+    wxString polar_file = pref->m_textCtrlPolarFile->GetValue();
+    polar_file.Trim(true);
+    polar_file.Trim(false);
 
     if (m_copy_use_ais != copy_ais || m_copy_use_file != copy_file ||
         m_copy_mmsi != copyMMSI) {
@@ -263,6 +284,10 @@ void ShipDriverPi::ShowPreferencesDialog(wxWindow* parent) {
 
     if (m_copy_use_nmea != copy_nmea) {
       m_copy_use_nmea = copy_nmea;
+    }
+
+    if (m_polar_file != polar_file) {
+      m_polar_file = polar_file;
     }
 
     if (m_dialog) {
@@ -338,6 +363,7 @@ bool ShipDriverPi::LoadConfig() {
       conf->Read("shipdriverUseNMEA", &m_copy_use_nmea, false);
       conf->Read("shipdriverUseFile", &m_copy_use_file, false);
       m_copy_mmsi = conf->Read("shipdriverMMSI", "123456789");
+      m_polar_file = conf->Read("shipdriverPolarFile", "");
 
       m_hr_dialog_x = conf->Read("DialogPosX", 40L);
       m_hr_dialog_y = conf->Read("DialogPosY", 140L);
@@ -355,6 +381,7 @@ bool ShipDriverPi::LoadConfig() {
       conf->Read("shipdriverUseNMEA", &m_copy_use_nmea, false);
       conf->Read("shipdriverUseFile", &m_copy_use_file, false);
       m_copy_mmsi = conf->Read("shipdriverMMSI", "123456789");
+      m_polar_file = conf->Read("shipdriverPolarFile", "");
 
       m_hr_dialog_x = conf->Read("DialogPosX", 40L);
       m_hr_dialog_y = conf->Read("DialogPosY", 140L);
@@ -391,6 +418,7 @@ bool ShipDriverPi::SaveConfig() {
     conf->Write("shipdriverUseNMEA", m_copy_use_nmea);
     conf->Write("shipdriverUseFile", m_copy_use_file);
     conf->Write("shipdriverMMSI", m_copy_mmsi);
+    conf->Write("shipdriverPolarFile", m_polar_file);
 
     conf->Write("DialogPosX", m_hr_dialog_x);
     conf->Write("DialogPosY", m_hr_dialog_y);

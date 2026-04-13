@@ -126,6 +126,7 @@ public:
 
   [[nodiscard]] double GetCursorLat() const { return m_cursor_lat; }
   [[nodiscard]] double GetCursorLon() const { return m_cursor_lon; }
+  [[nodiscard]] const wxString& GetPolarFile() const { return m_polar_file; }
 
   void ShowPreferencesDialog(wxWindow* parent) override;
   void SetPluginMessage(wxString& message_id, wxString& message_body) override;
@@ -165,6 +166,7 @@ private:
   bool m_copy_use_file;
   wxString m_copy_mmsi;
   bool m_copy_use_nmea;
+  wxString m_polar_file;
 };
 
 #endif

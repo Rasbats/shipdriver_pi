@@ -465,6 +465,24 @@ shipdriverPreferences::shipdriverPreferences( wxWindow* parent, wxWindowID id, c
 
 	sbSizer1->Add( sbSizer4, 1, wxEXPAND, 5 );
 
+	wxStaticBoxSizer* sbSizer5;
+	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Polars") ), wxVERTICAL );
+
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_textCtrlPolarFile = new wxTextCtrl( sbSizer5->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4->Add( m_textCtrlPolarFile, 1, wxALL|wxEXPAND, 5 );
+
+	m_buttonPolarBrowse = new wxButton( sbSizer5->GetStaticBox(), wxID_ANY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4->Add( m_buttonPolarBrowse, 0, wxALL, 5 );
+
+
+	sbSizer5->Add( bSizer4, 1, wxEXPAND, 5 );
+
+
+	sbSizer1->Add( sbSizer5, 1, wxEXPAND, 5 );
+
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( sbSizer1->GetStaticBox(), wxID_OK );
 	m_sdbSizer1->AddButton( m_sdbSizer1OK );
