@@ -861,12 +861,10 @@ void Dlg::Notify() {
   }
 
   if (m_bGrib && m_bUsingWind) {
-    MWVT = createMWVTSentence(initSpd, myDir, wdir, wspd);
     MWVA = createMWVASentence(initSpd, myDir, wdir, wspd);
-    // MWD = createMWDSentence(wdir, wspd);
+    MWD = createMWDSentence(wdir, wspd);
 
     PushNMEABuffer(MWVA + "\r\n");
-    PushNMEABuffer(MWVT + "\r\n");
     PushNMEABuffer(MWD + "\r\n");
   }
 
@@ -1075,7 +1073,7 @@ wxString Dlg::createMWVTSentence(double spd, double hdg, double winddirection,
   wxString nUnits;
   wxString nC = ",";
   wxString nA = "A";
-  nUnits = "K";
+  nUnits = "N";
   nMWV = "WIMWV";
   nMWD = "WIMWD";
   nRelTrue = "T";
@@ -1181,7 +1179,7 @@ wxString Dlg::createMWVASentence(double spd, double hdg, double winddirection,
   wxString nUnits;
   wxString nC = ",";
   wxString nA = "A";
-  nUnits = "K";
+  nUnits = "N";
   nMWV = "WIMWV";
   nMWD = "WIMWD";
   nRelTrue = "R";
