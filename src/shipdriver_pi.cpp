@@ -482,7 +482,7 @@ void ShipDriverPi::SetPluginMessage(wxString& message_id,
              value["Minute"].asInt(), value["Second"].asInt());
 
     if (m_dialog) {
-      m_dialog->m_GribTimelineTime = time.ToUTC();
+      m_dialog->m_GribTimelineTime = time;
       // m_pDialog->m_textCtrl1->SetValue(dt);
     }
   }
