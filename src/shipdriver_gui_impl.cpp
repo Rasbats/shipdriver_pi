@@ -1937,8 +1937,7 @@ double Dlg::GetPolarSpeed(double lat, double lon, double cse) {
   double spd;
   double dir;
 
-  wxDateTime dt;
-  dt = wxDateTime::UNow();
+   wxDateTime dt = m_GribTimelineTime.IsValid() ? m_GribTimelineTime : wxDateTime::Now();
 
   bool m_bGrib = GetGribSpdDir(dt, lati, loni, spd, dir);
   if (!m_bGrib) {
