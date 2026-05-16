@@ -1,3 +1,7 @@
+
+3.4.6 May 16, 2026
+* Fix update-templates problem in 3.4.5 - #651
+
 3.4.5 Mar 06, 2026
 * Stick to poedit version 2.4.6 - #642
 
