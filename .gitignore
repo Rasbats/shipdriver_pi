@@ -8,7 +8,6 @@ po/*.pot
 *humbs.db
 cache
 cmake-build-*
-local_config.cmake
 plugins
 *.bat
 *.bak

@@ -1,3 +1,26 @@
+
+3.4.6 May 16, 2026
+* Fix update-templates problem in 3.4.5 - #651
+
+3.4.5 Mar 06, 2026
+* Stick to poedit version 2.4.6 - #642
+
+3.4.4 Feb 06, 2026
+* Add new Flatpak build using runtime 25.08 for OpenCPN 5.14 - #631
+* update-templates: bugfixes and clean up - #637
+* Use segment 13 from APB sentence - #639
+
+3.4.3 Dec 28, 2025
+* update-templates: syntax bugfix
+
+3.4.2 Nov 13, 2025
+* .circleci/config: Formatting bugfix
+
+3.4.1 Nov 13, 2025
+* CI: update macos to build intel legacy and universal.
+* build-deps/control: Handle outdated libunarr-dev dependency
+* opencpn-libs: Update, fixes annoying cmake warnings - #605
+
 3.4.0 Sep13, 2025
 
 * Updating opencpn-libs to latest version.#0559aae
