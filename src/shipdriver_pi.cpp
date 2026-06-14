@@ -190,6 +190,8 @@ bool ShipDriverPi::DeInit() {
     if ((m_dialog->m_timer) && (m_dialog->m_timer->IsRunning())) {
       // need to stop the timer or crash on exit
       m_dialog->m_timer->Stop();
+      m_dialog->Disconnect(TIMER_ID, wxEVT_TIMER,
+                        (wxObjectEventFunction)&Dlg::OnTimer);
     }
     m_dialog->Close();
     delete m_dialog;
@@ -310,7 +312,9 @@ void ShipDriverPi::OnToolbarToolCallback(int id) {
   if (!m_dialog) {
     m_dialog = new Dlg(m_parent_window);
     m_dialog->plugin = this;
-    m_dialog->m_timer = new wxTimer(m_dialog);
+    m_dialog->m_timer = new wxTimer(m_dialog, TIMER_ID);
+    m_dialog->Connect(TIMER_ID, wxEVT_TIMER,
+            (wxObjectEventFunction)&Dlg::OnTimer);
     m_dialog->Move(wxPoint(m_hr_dialog_x, m_hr_dialog_y));
     m_dialog->SetSize(m_hr_dialog_sx, m_hr_dialog_sy);
 
@@ -565,7 +569,8 @@ void ShipDriverPi::SetPluginMessage(wxString& message_id,
 }
 
 void ShipDriverPi::SetNMEASentence(wxString& sentence) {
-  if (m_dialog) {
+  if (NULL != m_dialog) {
     m_dialog->SetNMEAMessage(sentence);
   }
+  
 }

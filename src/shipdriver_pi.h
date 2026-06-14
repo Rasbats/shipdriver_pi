@@ -54,6 +54,8 @@
 #define GRIB_MIN_MAJOR 4
 #define GRIB_MIN_MINOR 1
 
+#define TIMER_ID 1001
+
 class Dlg;
 
 static inline bool GribCurrent(GribRecordSet* grib, double lat, double lon,

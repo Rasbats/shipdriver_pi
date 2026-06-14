@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,12 +26,10 @@
 #include <wx/tglbtn.h>
 #include <wx/stattext.h>
 #include <wx/statbox.h>
-#include <wx/timer.h>
 #include <wx/dialog.h>
 #include <wx/checkbox.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class ShipDriverBase
@@ -92,7 +90,6 @@ class ShipDriverBase : public wxDialog
 		virtual void OnDistressRelay( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRelayCancel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCollision( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnTimer( wxTimerEvent& event ) { event.Skip(); }
 
 
 	public:
@@ -103,7 +100,6 @@ class ShipDriverBase : public wxDialog
 		wxStaticText* m_stSpeed;
 		wxSlider* m_SliderSpeed;
 		wxTextCtrl* m_textCtrlSART;
-		wxTimer m_timer1;
 
 		ShipDriverBase( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
@@ -128,11 +124,12 @@ class shipdriverPreferences : public wxDialog
 		wxCheckBox* m_cbAisToFile;
 		wxTextCtrl* m_textCtrlMMSI;
 		wxCheckBox* m_cbNMEAToFile;
-		wxTextCtrl* m_textCtrlPolarFile;
 		wxButton* m_buttonPolarBrowse;
+		wxTextCtrl* m_textCtrlPolarFile;
 
 		shipdriverPreferences( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Preferences"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxRESIZE_BORDER );
 
 		~shipdriverPreferences();
 
 };
+

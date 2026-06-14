@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -223,7 +223,7 @@ ShipDriverBase::ShipDriverBase( wxWindow* parent, wxWindowID id, const wxString&
 	fgSizer82->Add( m_buttonAuto, 1, wxALL|wxEXPAND, 2 );
 
 	m_button7 = new wxButton( this, wxID_ANY, _("Follow"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_button7->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Arial") ) );
+	m_button7->SetFont( wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Arial") ) );
 	m_button7->SetMinSize( wxSize( 50,-1 ) );
 
 	fgSizer82->Add( m_button7, 1, wxALL|wxEXPAND, 2 );
@@ -367,7 +367,6 @@ ShipDriverBase::ShipDriverBase( wxWindow* parent, wxWindowID id, const wxString&
 	this->SetSizer( bSizer10 );
 	this->Layout();
 	bSizer10->Fit( this );
-	m_timer1.SetOwner( this, wxID_ANY);
 
 	this->Centre( wxBOTH );
 
@@ -394,7 +393,6 @@ ShipDriverBase::ShipDriverBase( wxWindow* parent, wxWindowID id, const wxString&
 	m_buttonDistressRelay->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnDistressRelay ), NULL, this );
 	m_buttonRelayCancel->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnRelayCancel ), NULL, this );
 	m_buttonCollision->Connect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnCollision ), NULL, this );
-	this->Connect( wxID_ANY, wxEVT_TIMER, wxTimerEventHandler( ShipDriverBase::OnTimer ) );
 }
 
 ShipDriverBase::~ShipDriverBase()
@@ -422,8 +420,7 @@ ShipDriverBase::~ShipDriverBase()
 	m_buttonDistressRelay->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnDistressRelay ), NULL, this );
 	m_buttonRelayCancel->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnRelayCancel ), NULL, this );
 	m_buttonCollision->Disconnect( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEventHandler( ShipDriverBase::OnCollision ), NULL, this );
-  this->Disconnect(wxID_ANY, wxEVT_TIMER,
-                      wxTimerEventHandler(ShipDriverBase::OnTimer));
+
 }
 
 shipdriverPreferences::shipdriverPreferences( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -465,23 +462,17 @@ shipdriverPreferences::shipdriverPreferences( wxWindow* parent, wxWindowID id, c
 
 	sbSizer1->Add( sbSizer4, 1, wxEXPAND, 5 );
 
-	wxStaticBoxSizer* sbSizer5;
-	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Polars") ), wxVERTICAL );
+	wxStaticBoxSizer* sbSizer41;
+	sbSizer41 = new wxStaticBoxSizer( new wxStaticBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Sail") ), wxVERTICAL );
 
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+	m_buttonPolarBrowse = new wxButton( sbSizer41->GetStaticBox(), wxID_ANY, _("Choose Polar File"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer41->Add( m_buttonPolarBrowse, 0, wxALL, 5 );
 
-	m_textCtrlPolarFile = new wxTextCtrl( sbSizer5->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_textCtrlPolarFile, 1, wxALL|wxEXPAND, 5 );
-
-	m_buttonPolarBrowse = new wxButton( sbSizer5->GetStaticBox(), wxID_ANY, _("Browse..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_buttonPolarBrowse, 0, wxALL, 5 );
+	m_textCtrlPolarFile = new wxTextCtrl( sbSizer41->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer41->Add( m_textCtrlPolarFile, 0, wxALL|wxEXPAND, 5 );
 
 
-	sbSizer5->Add( bSizer4, 1, wxEXPAND, 5 );
-
-
-	sbSizer1->Add( sbSizer5, 1, wxEXPAND, 5 );
+	sbSizer1->Add( sbSizer41, 1, wxEXPAND, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( sbSizer1->GetStaticBox(), wxID_OK );

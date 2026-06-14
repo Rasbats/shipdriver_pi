@@ -219,6 +219,7 @@ void Dlg::OnMouseEvent(wxMouseEvent& event) {
 
 #endif  // End of Android functions for move/resize
 
+
 void Dlg::OnTimer(wxTimerEvent& event) { Notify(); }
 
 void Dlg::SetNextStep(double inLat, double inLon, double inDir, double inSpd,
@@ -655,6 +656,7 @@ void Dlg::ResetPauseButton() {
 }
 
 void Dlg::OnClose(wxCloseEvent& event) {
+  
   if (m_timer->IsRunning()) m_timer->Stop();
   plugin->OnShipDriverDialogClose();
 }
@@ -1231,8 +1233,8 @@ wxString Dlg::createRMCSentence(wxDateTime myDateTime, double myLat,
   nDir = wxString::Format("%f", myDir);
   nDate = DateTimeToDateString(myDateTime);
 
-  nForCheckSum =
-      nRMC + nTime + nC + nA + nNS + nEW + nSpd + nC + nDir + nC + nDate + ",,,A";
+  nForCheckSum = nRMC + nTime + nC + nA + nNS + nEW + nSpd + nC + nDir + nC +
+                 nDate + ",,,A";
   nFinal = ndlr + nForCheckSum + nast + makeCheckSum(nForCheckSum);
   return nFinal;
 }
@@ -1297,7 +1299,7 @@ wxString Dlg::createVTGSentence(double mySpd, double myDir) {
   wxString nast = "*";
 
   nSpdN = wxString::Format("%f", mySpd);
-  nSpdK = wxString::Format("%f", mySpd*KNOT_2_KPH);
+  nSpdK = wxString::Format("%f", mySpd * KNOT_2_KPH);
   nDir = wxString::Format("%f", myDir);
 
   nForCheckSum =
@@ -1621,7 +1623,6 @@ wxString Dlg::createDSCAlertRelayCancelSentence(double lat, double lon,
   return nFinal;
 }
 
-
 wxString Dlg::createDBTSentence(double myDepthMeter) {
   /*
   $--DBT,a.a,F,b.b,M,c.c,F*hh<CR><LF>
@@ -1651,8 +1652,8 @@ wxString Dlg::createDBTSentence(double myDepthMeter) {
   nDepthFeet = wxString::Format("%f", myDepthMeter * METER_2_FEET);
   nDepthFathom = wxString::Format("%f", myDepthMeter * METER_2_FATHOM);
 
-  nForCheckSum =
-      nDBT + nC + nDepthFeet + nC + nFeet + nC + nDepthMeter + nC + nMeter + nC + nDepthFathom + nC + nFathom;
+  nForCheckSum = nDBT + nC + nDepthFeet + nC + nFeet + nC + nDepthMeter + nC +
+                 nMeter + nC + nDepthFathom + nC + nFathom;
 
   nFinal = ndlr + nForCheckSum + nast + makeCheckSum(nForCheckSum);
 
@@ -1937,7 +1938,8 @@ double Dlg::GetPolarSpeed(double lat, double lon, double cse) {
   double spd;
   double dir;
 
-   wxDateTime dt = m_GribTimelineTime.IsValid() ? m_GribTimelineTime : wxDateTime::Now();
+  wxDateTime dt =
+      m_GribTimelineTime.IsValid() ? m_GribTimelineTime : wxDateTime::Now();
 
   bool m_bGrib = GetGribSpdDir(dt, lati, loni, spd, dir);
   if (!m_bGrib) {
