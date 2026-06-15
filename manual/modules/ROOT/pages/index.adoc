@@ -25,16 +25,11 @@ sent across a network to another user.
 
 == 2. Install
 
-Download the installer.
-
-https://github.com/Rasbats/ShipDriver_pi/releases
-
-Windows: Run the .exe file.
+Select Options→Plugins. Update the master catalog and install the plugin, which is listed as 'ShipDriver'. The plugin is available for Windows, Linux and MacOS.
 
 == 3. Standard actions
 
-Enable the plugin using Tools→Plugins and finding the ShipDriver entry.
-Press the Enable button.
+Make sure the plugin is enabled. 
 
 image::sd1.png[]
 
@@ -71,11 +66,6 @@ If you have not chosen a start position a warning notice will appear.
 
 image::sd7.png[]
 
-
-At the same time the Grib plugin form appears. Grib data is used for the sail option
-
-The Grib form can be closed at this point.
-
 The basic controls for using the simulator are shown here:
 
 image::sd8.1.png[]
@@ -91,6 +81,7 @@ image::sd11.png[]
 
 == 4. Options
 
+[#Auto]
 === Auto
 
 The 'Auto' button directly controls the heading. 'Standby' stops the
@@ -99,35 +90,44 @@ override and stop 'Auto'.
 
 'Auto' active:
 
-
 image::sd14.png[]
 
+Using the -1, -10, +10, +1 buttons the heading can be adjusted by -1, -10, +10, +1 degrees.
 
+[#Follow]
+=== Follow
+
+Using the 'Follow' button the vessel will follow a route. The route to follow is selected from the list of available routes.
+
+The vessel will follow the route until the end of the route is reached. The vessel will then stop. The speed of the vessel is controlled by the speed control. The vessel will follow the route at the set speed.
+
+[#Sail]
 === Sail
 
 'Sail' uses the wind data from a Grib file to determine the speed of the
 boat. A polar from an 'Open 60' forms the basis for this. Press 'Sail'.
 By adjusting the heading the speed of the boat will change accordingly.
 
-If the Grib plugin is not using a file that covers the present
-time/location a warning appears.
+If the Grib plugin is not using a file that covers the present time/location a warning appears.
 
 image::sd17.png[]
 
+The Grib plugin can be used to select a Grib file that covers the present time/location. The Grib plugin will then use that file to determine the wind speed/direction.
 
 The speed control is not active when the 'Sail' option is in use.
 
 when 'Sail' is active the button changes colour from green to red. Press
 'Sail' again to stop this mode.
 
-[#ais]
+In Preferences the 'Sail' option can be used to select another polar file. ShipDriver will use that polar file to determine the speed of the vessel when 'Sail' is active.
+
+[#AIS]
 === AIS
 
 In Tools→Plugins the 'Preferences' button for ShipDriver is used to
 select the AIS options.
 
 image::sd18.png[]
-
 
 When recording AIS a text file is created that can be played back with
 the VDR plugin. This records AIS data from 'Own Ship'. This data is
@@ -138,12 +138,10 @@ AIS being recorded:
 
 image::sd19.png[]
 
-
 ShipDriver has been stopped and the AIS file is being played back using
 the VDR plugin:
 
 image::sd20.png[]
-
 
 By moving the vessel start position, re-starting and running ShipDriver,
 at the same time as playing the AIS with 'VDR_pi' a collision regs
@@ -171,10 +169,16 @@ Ship'.
 
 image::sd24.png[]
 
-
 This has limited use when OpenCPN is used on a single computer. However,
 on a network it is possible to transmit the data to another computer
 running ShipDriver allowing two users to simulate collision avoidance
 situations.
+
+[#Alarms]
+== Alarms
+
+image::sd25.png[]
+
+Activate the alarm by pressing the 'Alarm' button. The alarm can be silenced by pressing the 'Alarm' button again.
 
 == 5. FAQ
