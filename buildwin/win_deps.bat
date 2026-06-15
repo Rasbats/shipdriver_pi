@@ -47,7 +47,7 @@ python -m ensurepip
 python -m pip install --upgrade pip
 python -m pip install -q setuptools wheel
 python -m pip install -q cloudsmith-cli
-python -m pip install -q cryptography
+python -m pip install -q cryptography==46.0.7
 
 :: Install pre-compiled wxWidgets and other DLL; add required paths.
 ::
