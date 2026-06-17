@@ -70,6 +70,12 @@ set(SRC
 
 set(PKG_API_LIB api-18)  #  A dir in opencpn-libs/ e. g., api-17 or api-16
 
+# Minimum version which should be loaded. Ignored if api < 22.
+# Allows plugins using functions from 1.22+ API to be loaded by
+# hosts only supporting 1.21; plugins then needs to check if host
+# supports 1.22+ before using such functions.
+## set(MIN_API_VERSION 1.21)
+
 macro(late_init)
   # Perform initialization after the PACKAGE_NAME library, compilers
   # and ocpn::api is available.
