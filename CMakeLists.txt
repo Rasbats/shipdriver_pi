@@ -58,6 +58,11 @@ if (COMMAND late_init)
   late_init()
 endif ()
 
+# Optional IDE setup, typically target_include_directories() etc.
+if (EXISTS ide_setup.cmake)
+  include(ide_setup.cmake)
+endif ()
+
 # Configure the flatpak manifest
 file(
   GLOB manifest ${PROJECT_SOURCE_DIR}/flatpak/org.opencpn.OpenCPN.Plugin.*.yaml
@@ -76,7 +81,6 @@ if ("${BUILD_TYPE}" STREQUAL "")
   return ()
 endif ()
 
- 
 if (NOT ${BUILD_TYPE} STREQUAL "flatpak")
   # Build package as required (flatpak already dealt with).
   #
@@ -92,11 +96,10 @@ if (NOT ${BUILD_TYPE} STREQUAL "flatpak")
   include(PluginLocalization)
 
   include_directories(BEFORE ${CMAKE_BINARY_DIR}/include)
- 
+
   if (COMMAND add_plugin_libraries)
     add_plugin_libraries()
   endif ()
-
 endif ()
 
 configure_file(
