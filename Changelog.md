@@ -6,6 +6,7 @@
 * Add support for https://pre-commit.com - #629
 * Add support for dynamic API level - #632
 * Fix long standing flatpak bug causing occasional FTBFS - #519
+* Fix MacOS Universal build problem with newer compiler and system SDK
 * And the usual sleeve of bugfixes and minor enhancements
 
 3.4.6 May 16, 2026
