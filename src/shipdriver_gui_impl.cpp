@@ -219,7 +219,6 @@ void Dlg::OnMouseEvent(wxMouseEvent& event) {
 
 #endif  // End of Android functions for move/resize
 
-
 void Dlg::OnTimer(wxTimerEvent& event) { Notify(); }
 
 void Dlg::SetNextStep(double inLat, double inLon, double inDir, double inSpd,
@@ -656,7 +655,6 @@ void Dlg::ResetPauseButton() {
 }
 
 void Dlg::OnClose(wxCloseEvent& event) {
-  
   if (m_timer->IsRunning()) m_timer->Stop();
   plugin->OnShipDriverDialogClose();
 }

@@ -92,7 +92,7 @@ cd $builddir
 manifest=$(ls ../flatpak/org.opencpn.OpenCPN.Plugin*yaml)
 sed -i  '/^runtime-version/s/:.*/:'" ${FLATHUB_BRANCH:-stable}/"  $manifest
 sed -i  '/^sdk:/s|//.*|//'"${SDK:-24.08}|"  $manifest
- 
+
 if (( "$BRANCH" >= 2508 )); then
     # From 25.08 the runtime contains libusb. If manifest has added this,
     # remove it.
