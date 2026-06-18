@@ -275,4 +275,3 @@ msgstr "Annulla"
 #: src/ShipDrivergui_impl.cpp:2222
 msgid "OK"
 msgstr "Ok"
-

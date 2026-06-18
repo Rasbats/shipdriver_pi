@@ -162,7 +162,7 @@ public:
   wxString makeCheckSum(wxString mySentence);
 
   wxTimer* m_timer;
-  
+
   void OnTimer(wxTimerEvent& event);
 
   double GetLatitude() { return initLat; };

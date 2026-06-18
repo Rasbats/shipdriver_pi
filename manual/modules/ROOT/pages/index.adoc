@@ -29,7 +29,7 @@ Select Options→Plugins. Update the master catalog and install the plugin, whic
 
 == 3. Standard actions
 
-Make sure the plugin is enabled. 
+Make sure the plugin is enabled.
 
 image::sd1.png[]
 

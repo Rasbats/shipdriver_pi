@@ -91,8 +91,8 @@ ShipDriverPi::ShipDriverPi(void* ppimgr)
       m_leftclick_tool_id(-1),
       m_show_shipdriver_icon(false),
       m_copy_use_ais(false),
-      m_copy_use_file(false), 
-      m_copy_use_nmea(false) 
+      m_copy_use_file(false),
+      m_copy_use_nmea(false)
 
 {
   // Create the PlugIn icons
@@ -185,13 +185,12 @@ bool ShipDriverPi::DeInit() {
         m_dialog->nmeastream->Close();
       }
     }
-  
 
     if ((m_dialog->m_timer) && (m_dialog->m_timer->IsRunning())) {
       // need to stop the timer or crash on exit
       m_dialog->m_timer->Stop();
       m_dialog->Disconnect(TIMER_ID, wxEVT_TIMER,
-                        (wxObjectEventFunction)&Dlg::OnTimer);
+                           (wxObjectEventFunction)&Dlg::OnTimer);
     }
     m_dialog->Close();
     delete m_dialog;
@@ -254,7 +253,8 @@ void ShipDriverPi::ShowPreferencesDialog(wxWindow* parent) {
   pref->m_buttonPolarBrowse->Bind(wxEVT_BUTTON, [pref, this](wxCommandEvent&) {
     wxFileDialog filedlg(
         pref, _("Choose a polar file"), wxEmptyString, wxEmptyString,
-        _("Polar files (*.xml;*.pol)|*.xml;*.pol|XML files (*.xml)|*.xml|POL files (*.pol)|*.pol|All files (*.*)|*.*"),
+        _("Polar files (*.xml;*.pol)|*.xml;*.pol|XML files (*.xml)|*.xml|POL "
+          "files (*.pol)|*.pol|All files (*.*)|*.*"),
         wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 
     if (!m_polar_file.IsEmpty()) {
@@ -314,7 +314,7 @@ void ShipDriverPi::OnToolbarToolCallback(int id) {
     m_dialog->plugin = this;
     m_dialog->m_timer = new wxTimer(m_dialog, TIMER_ID);
     m_dialog->Connect(TIMER_ID, wxEVT_TIMER,
-            (wxObjectEventFunction)&Dlg::OnTimer);
+                      (wxObjectEventFunction)&Dlg::OnTimer);
     m_dialog->Move(wxPoint(m_hr_dialog_x, m_hr_dialog_y));
     m_dialog->SetSize(m_hr_dialog_sx, m_hr_dialog_sy);
 
@@ -572,5 +572,4 @@ void ShipDriverPi::SetNMEASentence(wxString& sentence) {
   if (NULL != m_dialog) {
     m_dialog->SetNMEAMessage(sentence);
   }
-  
 }
