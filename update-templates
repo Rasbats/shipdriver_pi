@@ -160,7 +160,7 @@ for f in \
     .cmake-format.yaml \
     .gitattributes \
     .gitignore \
-    .pre-commit-config.yaml
+    .pre-commit-config.yaml \
     INSTALL.md \
     plugin.xml.in \
     .travis.yml \
