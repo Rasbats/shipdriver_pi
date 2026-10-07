@@ -4,14 +4,16 @@ on:
   push:
     branches:
       - ga
+  pull_request:
 
 env:
   # Key for upload write access to  cloudsmith repo
-  CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
+  # Blank on PRs: upload scripts and git-push skip when secrets are empty
+  CLOUDSMITH_API_KEY: ${{ github.event_name != 'pull_request' && secrets.CLOUDSMITH_API_KEY || '' }}
 
   # git-push setup
   GIT_REPO: ${{ secrets.GIT_REPO }}
-  GIT_KEY_PASSWORD: ${{ secrets.GIT_KEY_PASSWORD }}
+  GIT_KEY_PASSWORD: ${{ github.event_name != 'pull_request' && secrets.GIT_KEY_PASSWORD || '' }}
 
   # Custom Cloudsmith repos instead of hardcoded defaults in Plugin.cmake
   CLOUDSMITH_UNSTABLE_REPO: ${{ secrets.CLOUDSMITH_UNSTABLE_REPO }}
@@ -20,23 +22,20 @@ env:
 
 jobs:
   flatpak-x86_64:
-    runs-on: ubuntu-20.04
+    # ubuntu-22.04 like CircleCI: build script uses pip --user (PEP 668 on 24.04)
+    runs-on: ubuntu-22.04
     env:
-      OCPN_TARGET: flatpak-x86_64
+      OCPN_TARGET: flatpak
       CMAKE_BUILD_PARALLEL_LEVEL: 2
+      BRANCH: 2408
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Patch manifest to use correct branch
-        run: >
-          sed -i '/branch:/s/:.*/: ga/' \
-              flatpak/org.opencpn.OpenCPN.Plugin.shipdriver.yaml
-
-      - name: Build Flatpak aarch64
+      - name: Build Flatpak x86_64
         run: ci/circleci-build-flatpak.sh
 
       - name: Upload tarball
-        run: cd build; /bin/bash < upload.sh
+        run: cd /build-flatpak; /bin/bash < upload.sh
 
       - name: Upload metadata
         run: python3 ci/git-push
