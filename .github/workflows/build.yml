@@ -40,3 +40,29 @@ jobs:
 
       - name: Upload metadata
         run: python3 ci/git-push
+
+  msvc:
+    runs-on: windows-2022
+    strategy:
+      matrix:
+        include:
+          - platform: Win32
+            arch: x86
+          - platform: x64
+            arch: x64
+    env:
+      PLATFORM: ${{ matrix.platform }}
+      CONFIGURATION: RelWithDebInfo
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 10
+
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{ matrix.arch }}
+
+      - name: Build, upload and push metadata
+        shell: cmd
+        run: call ci\appveyor.bat
