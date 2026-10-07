@@ -37,8 +37,8 @@ cmake -A %GENERATOR_PLATFORM% -G "Visual Studio 17 2022" ^
     -DwxWidgets_LIB_DIR=!wxWidgets_LIB_DIR! ^
     -DwxWidgets_ROOT_DIR=!wxWidgets_ROOT_DIR! ^
     -DOCPN_TARGET_TUPLE=%OCPN_TARGET% ^
-    ..
-cmake --build . --target tarball --config %CONFIGURATION%
+    .. || exit /b 1
+cmake --build . --target tarball --config %CONFIGURATION% || exit /b 1
 
 :: Display dependencies debug info
 echo import glob; import subprocess > ldd.py
@@ -47,8 +47,8 @@ echo subprocess.call(['dumpbin', '/dependents', lib], shell=True) >> ldd.py
 python ldd.py
 
 echo Uploading artifact
-call upload.bat
+call upload.bat || exit /b 1
 
 echo Pushing updates to catalog
-python %SCRIPTDIR%..\ci\git-push
+python %SCRIPTDIR%..\ci\git-push || exit /b 1
 cd ..

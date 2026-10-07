@@ -107,4 +107,7 @@ echo set "wxWidgets_ROOT_DIR=%wxWidgets_ROOT_DIR%" > %CONFIG_FILE%
 echo set "wxWidgets_LIB_DIR=%wxWidgets_LIB_DIR%" >> %CONFIG_FILE%
 
 
-refreshenv
+call refreshenv
+:: refreshenv rebuilds PATH from registry, where pathman may not have
+:: landed; make gettext visible in this session regardless
+set "PATH=%POEDIT_HOME%\bin;%PATH%"
