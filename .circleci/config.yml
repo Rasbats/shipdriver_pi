@@ -80,21 +80,6 @@ jobs:
       - run: cd build-debian; /bin/bash < upload.sh
       - run: ci/git-push.sh build-debian
 
-  build-flatpak-arm64:
-    machine:
-      image: ubuntu-2204:current
-    resource_class: arm.medium
-    environment:
-      - OCPN_TARGET: flatpak-arm64
-      - CMAKE_BUILD_PARALLEL_LEVEL: 2
-      - BRANCH: 2208
-    parameters:
-      cache-key:
-        type: string
-        # Update the last part, here v2, to invalidate cache
-        default: "fp-arm20-v2"
-    <<: *flatpak-steps
-
   build-flatpak-arm64-2408:
     machine:
       image: ubuntu-2204:current
@@ -123,20 +108,6 @@ jobs:
         type: string
         # Update the last part, here v2, to invalidate cache
         default: "fp-arm25-v2"
-    <<: *flatpak-steps
-
-  build-flatpak-x86:
-    machine:
-      image: ubuntu-2204:current
-    environment:
-      - OCPN_TARGET: flatpak
-      - CMAKE_BUILD_PARALLEL_LEVEL: 2
-      - BRANCH: 2208
-    parameters:
-      cache-key:
-        type: string
-        # Update the last part, here v2, to invalidate cache
-        default: "fp-x86-20-v2"
     <<: *flatpak-steps
 
   build-flatpak-x86-2408:
@@ -226,12 +197,6 @@ workflows:
   version: 2
   build_all:
     jobs:
-
-      - build-flatpak-arm64:
-          <<: *std-filters
-
-      - build-flatpak-x86:
-          <<: *std-filters
 
       - build-flatpak-arm64-2408:
           <<: *std-filters
