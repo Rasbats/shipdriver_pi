@@ -1,5 +1,5 @@
 ---
-version: 2.2
+version: 2.1
 
 debian-steps: &debian-steps
   steps:
@@ -194,7 +194,7 @@ std-filters: &std-filters
         - /tmp-.*/
 
 workflows:
-  version: 2
+  version: 2.1
   build_all:
     jobs:
 
