@@ -1,5 +1,5 @@
 :: Build script for appveyor, https://www.appveyor.com
-:: Builds one version linked against wxWidgets 3.2
+:: Builds one version linked against wxWidgets 3.2 (Win32) or 3.3 (x64)
 
 @echo off
 setlocal enabledelayedexpansion
