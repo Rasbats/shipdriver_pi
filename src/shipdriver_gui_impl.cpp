@@ -2338,17 +2338,11 @@ void Dlg::OnFollow(wxCommandEvent& event) {
         countRoutePoints = thisRoute->pWaypointList->size();
         myList = thisRoute->pWaypointList;
 
-        PlugIn_Waypoint_Ex* myWaypoint;
         theWaypoints.clear();
-
-        wxPlugin_WaypointExListNode* pwpnode = myList->GetFirst();
-        while (pwpnode) {
-          myWaypoint = pwpnode->GetData();
-
-          theWaypoints.push_back(myWaypoint);
-
-          pwpnode = pwpnode->GetNext();
-        }
+        for (Plugin_WaypointExList::compatibility_iterator node =
+                 myList->GetFirst();
+             node; node = node->GetNext())
+          theWaypoints.push_back(node->GetData());
 
         for (size_t n = 0; n < theWaypoints.size(); n++) {
           if (n == 0) {
