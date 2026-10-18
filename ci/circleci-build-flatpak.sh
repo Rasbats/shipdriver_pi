@@ -24,6 +24,10 @@ elif [[  "$BRANCH" == 2508 ]]; then
   export SDK=25.08
   export FLATHUB_REPO=flathub-beta
   export FLATHUB_BRANCH=beta
+elif [[  "$BRANCH" == 2608 ]]; then
+  export SDK=26.08
+  export FLATHUB_REPO=flathub-beta
+  export FLATHUB_BRANCH=beta
 else
   echo "Wrong branch: \"$BRANCH\""
   exit 1
