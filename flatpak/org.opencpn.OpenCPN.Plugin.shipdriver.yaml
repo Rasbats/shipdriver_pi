@@ -1,7 +1,7 @@
 #
 # Branches and runtime-version:
 #   - stable     Flathub main branch with 24.08 runtime.
-#   - beta       Flathub beta branch with 25.08 runtime.
+#   - beta       Flathub beta branch with 25.08 or 26.08 runtime.
 #
 # This is a template used to create a complete manifest in the build
 # directory. Doing so, it handles three tokens:
