@@ -80,6 +80,34 @@ jobs:
       - run: cd build-debian; /bin/bash < upload.sh
       - run: ci/git-push.sh build-debian
 
+  build-forky-amd64:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: medium
+    environment:
+      - OCPN_TARGET: forky
+      - TARGET_TUPLE: debian-x86_64;14;x86_64
+      - CMAKE_BUILD_PARALLEL_LEVEL: 2
+    steps:
+      - checkout
+      - run: ci/circleci-build-debian-docker.sh
+      - run: cd build-debian; /bin/bash < upload.sh
+      - run: ci/git-push.sh build-debian
+
+  build-forky-arm64:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: arm.medium
+    environment:
+      - OCPN_TARGET: forky
+      - TARGET_TUPLE: debian-arm64;14;arm64
+      - CMAKE_BUILD_PARALLEL_LEVEL: 2
+    steps:
+      - checkout
+      - run: ci/circleci-build-debian-docker.sh
+      - run: cd build-debian; /bin/bash < upload.sh
+      - run: ci/git-push.sh build-debian
+
   build-flatpak-arm64-2408:
     machine:
       image: ubuntu-2204:current
@@ -264,4 +292,10 @@ workflows:
           <<: *std-filters
 
       - build-trixie-arm64:
+          <<: *std-filters
+
+      - build-forky-amd64:
+          <<: *std-filters
+
+      - build-forky-arm64:
           <<: *std-filters
