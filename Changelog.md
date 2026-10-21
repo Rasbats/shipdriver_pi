@@ -1,4 +1,4 @@
-3.5.1 TBD
+3.5.1 Oct 21, 2026
 * Add win64 builds.
 * Add new Flatpak build using runtime 26.08
 * Remove Android armhf builds and add Debian/Forky as of
