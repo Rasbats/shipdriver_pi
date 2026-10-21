@@ -1,4 +1,11 @@
 3.5.1 Oct 21, 2026
+* Add win64 builds.
+* Add new Flatpak build using runtime 26.08
+* Remove Android armhf builds and add Debian/Forky as of
+  https://github.com/OpenCPN/OpenCPN/discussions/5494
+* Remove outdated bullseye and Linux armhf builds
+  https://github.com/OpenCPN/OpenCPN/discussions/4701
+* Remove Flatpak builds older than 24.08.
 * Remove outdated bullseye and Linux armhf builds
   https://github.com/OpenCPN/OpenCPN/discussions/4701
 * Add new Flatpak build using runtime 26.08
