@@ -1,4 +1,4 @@
-3.5.1 TBD
+3.5.1 Oct 21, 2026
 * Remove outdated bullseye and Linux armhf builds
   https://github.com/OpenCPN/OpenCPN/discussions/4701
 * Add new Flatpak build using runtime 26.08
